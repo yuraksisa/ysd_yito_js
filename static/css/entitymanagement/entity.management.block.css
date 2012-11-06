@@ -1,0 +1,17 @@
+.entity-blocks-container { // The page entities are represented here
+  margin: 2px;
+  padding: 2px;
+}
+
+
+.entity-block-container { // Each entity is represented 
+  margin: 2px;
+  /*padding: 2px;*/
+  float: left;	  
+}
+
+.entity-block-container-inside {
+  margin: 2px;
+  padding: 2px;
+  border: 1px dashed gray;
+}

@@ -1,0 +1,16 @@
+form div label.fieldtitle {
+  padding-top: 5px;
+}
+
+form div input.fieldcontrol, form div textarea.fieldcontrol, form div select.fieldcontrol {
+}
+
+form div input.fieldcontrol[readonly="readonly"] {
+ background: #DDD;
+ color: gray;	
+}
+
+form .fielddescription {
+ color: darkgray;
+ clear: left;	
+}
