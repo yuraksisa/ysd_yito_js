@@ -1,5 +1,6 @@
 .entity-management {
- margin-top: 10px;	
+ margin-top: 5px;
+ padding: 5px;	
 }
 
 .element-block {
@@ -44,6 +45,11 @@
 .element-navigation-detail {
  cursor: pointer;
  cursor: hand;		
+}
+
+.element-row-selector {
+ cursor: pointer;
+ cursor: hand;    
 }
 
 .element-detail {

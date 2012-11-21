@@ -38,7 +38,13 @@ requirejs(['jquery',
            'YSDForms',
            'YSDCommentsManager',
            'YSDDateControl',
-           'YSDDialog'
+           'YSDDialog',
+           'YSDPager',
+           'YSDPagerSimpleController',
+           'YSDPagerSimpleView',
+           'YSDPagerPListController',
+           'YSDPagerPListView',
+           'YSDPagerFactory'
         ],
         function() {
           // none	

@@ -51,12 +51,14 @@ define(function(){
   	  this.view.editEntity();
   	};
   	
-  	this.createEntityButtonClick = function() { /* Create button click */
-  	  this.model.create();
+  	this.createEntityButtonClick = function(target) { /* Create button click */
+      var createUrl = $(target).attr('data-create-url');
+  	  this.model.create(createUrl);
   	};
   	
-  	this.updateEntityButtonClick = function() { /* Update button click */
-  	  this.model.update();
+  	this.updateEntityButtonClick = function(target) { /* Update button click */
+      var updateUrl = $(target).attr('data-update-url');
+  	  this.model.update(updateUrl);
   	};
   	
   	this.cancelEntityButtonClick = function() { /* Cancel creation/update process click */

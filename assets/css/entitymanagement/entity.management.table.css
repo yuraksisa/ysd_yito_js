@@ -1,6 +1,10 @@
 .table-container {
-  padding: 5px;
   border: 1px solid #EEE;
+  padding: 5px;
+  margin: 0px;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+ -moz-border-radius: 5px; 
 }
 
 .table {

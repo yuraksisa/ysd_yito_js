@@ -9,11 +9,11 @@ define(['YSDListSelectorModel','YSDSelectSelectorController', 'YSDSelectSelector
     It creates a new View from the SelectSelectorView to represent the hierarchical components
   */ 
 
-  YSDSelectHierarchicalSelector = function(selectControlId, dataSource, value, nullOption) {
+  YSDSelectHierarchicalSelector = function(selectControlId, dataSource, value, nullOption, nullOptionText) {
 	
     this.model = new ListSelectorModel(dataSource, value);
     this.controller = new SelectSelectorController();
-    this.view = new YSDSelectHierarchicalSelectorView(this.model, this.controller, selectControlId, nullOption);	
+    this.view = new YSDSelectHierarchicalSelectorView(this.model, this.controller, selectControlId, nullOption, nullOptionText);	
   
     this.setValue = function(newValue) {
       this.model.setValue(newValue);	
@@ -28,7 +28,7 @@ define(['YSDListSelectorModel','YSDSelectSelectorController', 'YSDSelectSelector
 
   /* ------------- The view -------------------- */
 
-  YSDSelectHierarchicalSelectorView = function(model, controller, selectControlId, nullOption) {
+  YSDSelectHierarchicalSelectorView = function(model, controller, selectControlId, nullOption, nullOptionText) {
 
     SelectSelectorView.apply(this, arguments);
 
@@ -36,6 +36,12 @@ define(['YSDListSelectorModel','YSDSelectSelectorController', 'YSDSelectSelector
     this.controller = controller;
     this.selectControlId = selectControlId;
     this.nullOption = nullOption || false;
+    if (nullOptionText) {
+      this.nullOptionText = nullOptionText;
+    }
+    else {
+      this.nullOptionText = '- No selection -';
+    }
 
     this.notify = function(status) {
   	

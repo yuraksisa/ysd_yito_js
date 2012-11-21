@@ -36,15 +36,15 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	this.entityView = entityView;
   	this.entity = entity;
 	
-	if (entityHooks == null) {
-	  this.entityHooks = [];	
-	}
-	else if (entityHooks instanceof Array) {
-	  this.entityHooks = entityHooks;
-	}
-	else {
-	  this.entityHooks = new Array(entityHooks);	
-	}
+	  if (entityHooks == null) {
+	    this.entityHooks = [];	
+	  }
+	  else if (entityHooks instanceof Array) {
+	    this.entityHooks = entityHooks;
+	  }
+	  else {
+	    this.entityHooks = new Array(entityHooks);	
+	  }
 	
     this.pageSize = pageSize; /* Number of elements shown in a page */
   	  	
@@ -87,7 +87,27 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
       	case 'query_executed_error' :
       	   this.state = 'error_retrieving_data';
       	   break;  
-      	
+
+        case 'bulk_action':
+           this.state = 'executing_bulk_action';
+           break;
+        case 'bulk_action_executed_successfully':
+           this.state = 'bulk_action_executed';
+           break;
+        case 'bulk_action_executed_error':
+           this.state = 'error_executing_bulk_action';
+           break;
+
+        case 'execute_action':
+           this.state = 'executing_action';
+           break;
+        case 'action_executed_successfully':
+           this.state = 'action_executed';
+           break;
+        case 'action_executed_error':
+           this.state = 'error_executing_action';
+           break;
+
         case 'entity_load':
            this.state = 'loading_entity';
            break;
@@ -102,7 +122,7 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
       	   this.state = 'creating_entity';
       	   break;      	         	
       	case 'entity_created_successfully':
-      	   this.state = 'entity_created';
+      	   this.state = 'entity_created';           
       	   break;
       	case 'entity_created_error':
       	   this.state = 'error_creating_entity';
@@ -245,10 +265,6 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	    this.configuration[property] = model_configuration[property];
   	  }
   	}
-
-    if (typeof this.configuration.data_entry == 'undefined') {
-      this.configuration.data_entry = false;
-    }
   	
   	if (!this.configuration.url_base || !this.configuration.action) { 	
   	  this.extractConfigurationFromURL();
@@ -285,7 +301,62 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
       return this.dataModel.current();
   	  	
   	};
-  	  	
+
+    this.getEntityId = function(object) { /* Get the entity id of the object */
+
+      for (var idx=0; idx < this.entityHooks.length; idx++) {         
+         if (this.entityHooks[idx].entityKey) {
+           return this.entityHooks[idx].entityKey(object); 
+         }           
+      }
+
+      return null;
+
+    }
+
+    this.getEntityIndexFromObject = function(object) { /* Search the entity in the list (by its key) and return it*/
+
+      var entities = this.getEntities();
+      var objectKey = this.getEntityId(object);
+
+      for (var idx=0; idx < entities.length; idx++) {
+         if (objectKey != null && objectKey == this.getEntityId(entities[idx])) {
+           return idx;
+         }
+      }
+
+      return -1;
+
+    }
+
+    this.synchronizeEntities = function(data) { /* Updates the entities with this data */
+      
+      var oldIndex = this.getEntityIndex();
+      
+      try {
+        
+        var entityIndex = null;
+
+        for (var idx=0; idx < data.length; idx++) {
+    
+          entityIndex=getEntityIndexFromObject(data[idx]);
+
+          if (entityIndex > -1) {
+            this.setEntityIndex(entityIndex);
+            this.synchronizeCurrentEntity(data[idx]);
+          }
+
+        }
+      
+      }
+      finally {
+        this.setEntityIndex(oldIndex);
+      }
+
+      return this.dataModel.getData();
+
+    }  	
+
   	this.synchronizeCurrentEntity = function(new_data) { /* Updates the current entity with this data */
   	
   	  return this.dataModel.synchronize(new_data);
@@ -366,11 +437,11 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	
   	this.summaryPageMessage = function() { /* Get the summary block message */
  	  	return Math.max(((this.page-1) * this.pageSize + 1), 1) + ' - ' + Math.min(((this.page) * this.pageSize), this.summary.total) + ' de ' + this.summary.total;
- 	},
+ 	  },
  	  
- 	this.summaryElementMessage = function() { /* Get the element block message */
+ 	  this.summaryElementMessage = function() { /* Get the element block message */
  	  	return (((this.page-1) * this.pageSize) + this.getEntityIndex() + 1) + ' de ' + this.summary.total;
- 	}, 	  	
+ 	  }, 	  	
 
     this.summaryMessage = function() { /* Get the summary message */
     	return this.navigationMode == 'page'?this.summaryPageMessage():this.summaryElementMessage();
@@ -476,12 +547,12 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	};
   		
 
-  	this.create = function() {  /* Creates a new instance */
+  	this.create = function(createUrl, callback) {  /* Creates a new instance */
 
   	  this.change_state('entity_create');
   	  
   	  var the_model = this;
-  	  var the_url = this.urls.create_url;
+  	  var the_url = createUrl || this.urls.create_url;
   	  
   	  if (!$($('.create-entity-button')[0].form).valid()) {
   	  	this.entityView.notify_user('Validation errors', 'Check the form. There are errors');
@@ -511,9 +582,17 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	            data_type : 'json',
   	            content_type : 'json',
   	            success : function(data, textStatus, jqXHR) {
-                  the_model.appendEntity(data);
+                  the_model.appendEntity(data);                      
+                  for (var idx=0; idx < the_model.entityHooks.length; idx++) { // Notify the hooks that the element has been created         
+                    if (the_model.entityHooks[idx].onCreate) {
+                      the_model.entityHooks[idx].onCreate(data); 
+                    }           
+                  }
   	              the_model.change_state('entity_created_successfully');
-  	            },
+                  if (callback) {
+                    callback();
+                  }  	            
+                },
   	            error : function(data, textStatus, jqXHR) {
   	              the_model.change_state('entity_created_error');	
   	            },
@@ -528,28 +607,28 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	};
   		
   	
-  	this.update = function() { /* Updates an existing instance */
+  	this.update = function(updateUrl, callback) { /* Updates an existing instance */
   	  
   	  this.change_state('entity_update');
   	  
   	  var the_model = this;
-  	  var the_url = this.urls.update_url;
+  	  var the_url = updateUrl || this.urls.update_url;
   	  
   	  if (!$($('.update-entity-button')[0].form).valid()) {
   	  	this.entityView.notify_user('Validation errors', 'Check the form. There are errors');
   	    return;	
   	  }  	  
   	  
-  	  var the_form_data = $($('.update-entity-button')[0].form).formParams(true);
+  	  var the_data = $($('.update-entity-button')[0].form).formParams(true);
 
   	  // Pre-process the data before be sent to the backend (Hooks)	  
       for (var idx=0; idx < this.entityHooks.length; idx++) {        	
         if (this.entityHooks[idx].adaptFormData) {
-          the_data = this.entityHooks[idx].adaptFormData(the_form_data);	
+          the_data = this.entityHooks[idx].adaptFormData(the_data);	
         }	        	
       }
   	  
-  	  var the_data = this.synchronizeCurrentEntity(the_form_data);
+  	  var the_data = this.synchronizeCurrentEntity(the_data);
   	    	    	    	    	  
   	  the_data = encodeURIComponent(JSON.stringify(the_data));
   	  
@@ -567,6 +646,9 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	            success : function(data, textStatus, jqXHR) {
   	              the_model.synchronizeCurrentEntity(data);
   	              the_model.change_state('entity_updated_successfully');
+                  if (callback) {
+                    callback();
+                  }   
   	            },
   	            error : function(data, textStatus, jqXHR) {
   	              the_model.change_state('entity_updated_error');	
@@ -582,7 +664,7 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	};
   	
   	
-  	this.delete = function() { /* Delete an existing instance */
+  	this.delete = function(callback) { /* Delete an existing instance */
   		
   	  this.change_state('entity_delete');
   	  
@@ -603,6 +685,9 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	            content_type : 'json',
   	            success : function(data, textStatus, jqXHR) {
   	              the_model.change_state('entity_deleted_successfully');
+                  if (callback) {
+                    callback();
+                  }                  
   	            },
   	            error : function(data, textStatus, jqXHR) {
   	              the_model.change_state('entity_deleted_error');	
@@ -616,7 +701,7 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   		
   	};
   	
-  	this.deleteAll = function() { /* Deletes all entities */
+  	this.deleteAll = function(callback) { /* Deletes all entities */
   	
   	  this.change_state('all_entities_delete');
   	  var the_model = this;
@@ -634,6 +719,9 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   		      content_type : 'json',
   		      success : function(data, textStatus, jqXHR) {
   		      	the_model.change_state('all_entities_deleted_successfully');
+              if (callback) {
+                callback();
+              }              
   		      },
   		      error : function(data, textStatus, jqXHR) {
   		      	the_model.lastError = textStatus;
@@ -646,9 +734,9 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	          }
   	  });   	
   	
-  	}
+  	};
   	
-    this.query = function(queryObject) { /* Queries for data */
+    this.query = function(queryObject, callback) { /* Queries for data */
   	 	  	 	
   	  this.change_state('query_execution');	
   	  
@@ -677,6 +765,9 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   		      	the_model.dataModel.setData(data.data);
   		      	the_model.summary = data.summary;
   		      	the_model.change_state('query_executed_successful');
+              if (callback) {
+                callback();
+              }              
   		      },
   		      error : function(data, textStatus, jqXHR) {
   		      	the_model.lastError = textStatus;
@@ -689,8 +780,87 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	          }
   	  }); 
   	};
+
+    this.navigateTo = function(url) { /* Navigate to the url */
+      window.location.href = url;
+    };
   	
-  };
+    this.action = function(method, url, data, callback) { /* Execute the action on the selected entity */
+
+     var the_data = null;
+     var the_model = this;
+
+     this.change_state('execute_action');
+
+     YSDGui.lockBackground("#000000", false);
+
+     if (typeof data != 'undefined') {
+       the_data = encodeURIComponent(JSON.stringify(data));
+     }
+
+     $.ajax( {url: url,
+              data: the_data,
+              type: method,
+              data_type: 'json',
+              content_type: 'json',
+              success: function(data, textStatus, jqXHR) {
+                the_model.synchronizeCurrentEntity(data);
+                  for (var idx=0; idx < the_model.entityHooks.length; idx++) { // Notify the hooks that the element has been created         
+                    if (the_model.entityHooks[idx].onAction) {
+                      the_model.entityHooks[idx].onAction(the_model, data); 
+                    }           
+                  }                
+                the_model.change_state('action_executed_successfully');
+                if (callback) {
+                  callback();
+                }                
+              },
+              error : function(data, textStatus, jqXHR) {
+                the_model.lastError = textStatus;
+                the_model.change_state('action_executed_error'); 
+              },
+              complete: function(jqXHR, textStatus) {
+                YSDGui.unLockBackground();
+              }
+
+            });
+
+    };
+
+    this.bulkAction = function(method, url, callback) { /* Execute the bulk action on the selected items */
+ 
+      var the_form_data = $($('.selectable-entity')[0].form).formParams(true);
+      var the_model = this;
+
+      this.change_state('bulk_action');
+
+      YSDGui.lockBackground("#000000", false);
+
+      $.ajax( { url: url,
+              data: the_form_data,
+              type: method,
+              data_type: 'json',
+              content_type: 'json',
+              success: function(data, textStatus, jqXHR) {
+                the_model.synchronizeEntities(data);
+                the_model.change_state('bulk_action_executed_successfully');
+                if (callback) {
+                  callback();
+                }                
+              },
+              error : function(data, textStatus, jqXHR) {
+                the_model.lastError = textStatus;
+                the_model.change_state('bulk_action_executed_error'); 
+              },
+              complete: function(jqXHR, textStatus) {
+                YSDGui.unLockBackground();
+              }              
+
+      });
+
+    };
+  
+  }
   
   return EntityModel;
   

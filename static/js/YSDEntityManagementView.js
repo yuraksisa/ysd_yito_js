@@ -211,6 +211,49 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
     	
     }
     
+    this.configureElementEvents = function(selector) { /* Configure the element actions */
+
+      var model = this.model;
+      var controller = this.controller;
+      var view = this;
+
+      var actions_selector = selector || '.element-action-button';
+      $(actions_selector).unbind('click');
+
+      $(actions_selector).bind('click',
+
+        function(event) {
+      
+          var actionMethod = $(event.currentTarget).attr('data-action-method');
+          var actionUrl = $(event.currentTarget).attr('data-action-url');
+
+          if (actionMethod && actionUrl) {
+
+            event.preventDefault();
+
+            var confirmMessage = $(event.currentTarget).attr('data-confirm-message');
+
+            if (confirmMessage) {
+              view.ask_for_confirmation('Confirm', 
+                                        confirmMessage,
+                                        function(){                                      
+                                          model.action(actionMethod, actionUrl);
+                                        });
+            } 
+            else {
+               model.action(actionMethod, actionUrl);
+            }
+          
+            return false;
+
+          }
+
+        }
+
+      );
+
+    }
+
     this.configureFormEvents = function() { /* Configure the form buttons */
     
       var model = this.model;
@@ -220,14 +263,14 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
       $('.create-entity-button').bind('click', 
         function(event) { 
         	event.preventDefault();
-        	controller.createEntityButtonClick(); 
+        	controller.createEntityButtonClick(event.currentTarget); 
         	return false;
         }
       );
       $('.update-entity-button').bind('click', 
         function(event) { 
         	event.preventDefault();
-        	controller.updateEntityButtonClick(); 
+        	controller.updateEntityButtonClick(event.currentTarget); 
         	return false;
         });
       $('.cancel-entity-button').bind('click', 
@@ -242,14 +285,28 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
     	
       switch (event.state) {
       	
+        case 'bulk_action_executed': /* bulk actions executed */
+           this.renderEntities();
+           break;
+
+        case 'error_executing_bulk_action': /* error executing bulk action */
+           this.notify_user('Error executing the process', 'Error executing the process');
+           break;
+
+        case 'action_executed':
+           this.update_status('<span class="entity-message entity-message-ok">action executed successfully</span>');        
+           break;
+
+        case 'action_executed_error':
+           this.notify_user('Error executing the process', 'Error executing the process');
+           break;
+
       	case 'data_loaded': /* query executed */
-      	
       	  this.renderEntities();
  
       	  if (this.model.navigationMode == 'entity') {
       	  	this.model.setEntityIndex((this.navigationAction == 'nextElement')?0:this.model.entitiesCount()-1); 
       	  }
-      	  
       	  break;  
       	  
       	case 'error_retrieving_data': /* query error */
@@ -283,12 +340,12 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
           	    this.redirect_destination_or_base();
             	}
               else { 
-                if (!this.model.configuration.data_entry) {
-                  this.renderEntity();
+                if (this.model.configuration.hold_form_after_action) {
+                  this.editEntity();
                 }
-          	    else {
-          	      this.newEntity();
-          	    }
+                else {
+                  this.newEntity();
+                }
               }
           	
           }
@@ -302,8 +359,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
           
        case 'error_creating_entity': /* error creating entity */
           
-          this.update_status('<span class="entity-message entity-message-error">Error creating '+ this.model.entity + '</span>');
-          
+          this.update_status('<span class="entity-message entity-message-error">Error creating '+ this.model.entity + '</span>');         
           this.notify_user('Error creating entity' , 'Server error creating entity');
           break;  
           
@@ -317,15 +373,17 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
             }
             else {
               if (!this.model.configuration.hold_form_after_action) {
-              this.renderEntity();
+                this.renderEntity();
               }
             }
           }
           else
             if (this.model.configuration.action == 'list') {
-              this.renderEntity(this.model.currentEntity());
-              this.updateEntityRow(this.model.currentEntity(), this.model.getEntityIndex());
-              this.elementMode();              	
+              if (!this.model.configuration.hold_form_after_action) {
+                this.renderEntity(this.model.currentEntity());
+                this.updateEntityRow(this.model.currentEntity(), this.model.getEntityIndex());
+                this.elementMode();
+              }              	
             }
       	  break;
       	  
@@ -384,6 +442,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
      }       
        
      $('.elements-list').show();    
+     $('.bottom-navigation-bar').show();
         
     };
 
@@ -411,6 +470,8 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
           this.model.entityHooks[idx].onRender(entity);	
         }	        	
       }       
+
+      $('.bottom-navigation-bar').show();
               
     };
   
@@ -457,13 +518,6 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
 
         if (destination = this.model.configuration.search_params['destination']) {
         	this.redirect_destination_or_base(); 
-        }
-
-        if (this.model.configuration.action == 'edit') {
-          this.renderEntity();
-        }
-        else {
-          this.redirect_destination_or_base(); 
         }
       
       }
@@ -522,6 +576,13 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
          var searchHtml = this.templates.tmpl_elements_search;
          $(searchContainer).html(searchHtml);
 
+         // Process the Hooks
+         for (var idx=0; idx < this.model.entityHooks.length; idx++) {          
+           if (this.model.entityHooks[idx].onRenderSearch) {
+             this.model.entityHooks[idx].onRenderSearch();  
+           }            
+         }             
+
       }
 
 
@@ -558,10 +619,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
                function() {               	  
                	  view.update_status('');
                	  controller.showEntityDetail(new Number($(this).attr('rel')));
-               });          
-
-      this.configureSearch();
-  	  	
+               });            	  	
     }
     
 
@@ -595,7 +653,8 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
        $('.element-form-container').hide();	
        $('.elements-container').hide();
        $('.element-container').show();
-     
+       
+       this.configureElementEvents();
        this.navigationBar();    	
     	
     };
@@ -606,8 +665,17 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
        $('.element-form-container').show();
        
        this.configureFormEvents();
+       this.configureElementEvents();
        htmlEditor('.texteditor'); // Converts the editor into HTML editors
     };
+
+    this.isPageMode = function() {
+       return $('.elements-container').is(':visible');
+    }
+
+    this.isFormElementMode = function() {
+      return $('.element-form-container').is(':visible');
+    }
 
     /* ------------------------------------------------ */
     

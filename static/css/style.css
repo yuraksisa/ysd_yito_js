@@ -206,7 +206,8 @@
 }
 /* ------- entity.management.css ---------*/
 .entity-management {
- margin-top: 10px;	
+ margin-top: 5px;
+ padding: 5px;  
 }
 
 .element-block {
@@ -214,10 +215,7 @@
 }
 
 .entity-title {
- font-size: 1em;
- font-weight: bold;	
- margin-top: 2px;
- margin-bottom: 0px;
+  border-bottom: 1px solid gray;
 }
 
 /* ------ Elements container ----- */
@@ -245,7 +243,15 @@
 /* ------ ELEMENT view  --------- */
 
 .element-container {
-	
+	border: 1px solid #EEE;
+  border-radius: 5px;
+ -webkit-border-radius: 5px;
+ -moz-border-radius: 5px;  
+}
+
+.element-row-selector {
+ cursor: pointer;
+ cursor: hand;    
 }
 
 .element-navigation-detail {
@@ -328,7 +334,11 @@
 /* ------ ELEMENT form --------- */
 
 .element-form-container {
- 	
+  border: 1px solid #EEE;
+  border-radius: 5px;
+ -webkit-border-radius: 5px;
+ -moz-border-radius: 5px;	
+ padding: 5px;
 }
 
 .element-form-detail {
@@ -526,6 +536,14 @@ form .fielddescription {
  clear: left;	
 }
 /* ------- entity.management.table.css ---------*/
+.table-container {
+  border: 1px solid #EEE;
+  padding: 5px;
+  margin: 0px;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+ -moz-border-radius: 5px; 
+}
 .table {
   margin: 1px;
   border-collapse: collapse;	
