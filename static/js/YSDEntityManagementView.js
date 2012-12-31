@@ -76,13 +76,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
           
       this.model.addListener('entity_selected', 
           function(event) { 
-          	 view.renderEntity(event);
-          	 // Process the Hooks
-             for (var idx=0; idx < view.model.entityHooks.length; idx++) {        	
-               if (view.model.entityHooks[idx].entitySelected) {
-                 view.model.entityHooks[idx].entitySelected(view.model.currentEntity());	
-               }	        	
-             }          	   
+          	 view.editEntity();       	   
           });
     };
     
@@ -132,8 +126,9 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
       	   view.update_status(''); 
       	   model.navigationMode = 'page'; 
            view.pageMode();
-           if (model.configuration.action != 'list') {
-       	     model.query();
+           if (model.configuration.action != 'list' || model.forceReload) {
+       	     model.forceReload = false;
+             model.query();
            }                      
       });
       
@@ -163,8 +158,8 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
       
       $('.edit-entity-button').bind('click',   
          function(event) { 
-         	view.update_status('<span class="entity-message">Edit '+ model.entity + ' </span>');
-         	controller.editEntityButtonClick();
+           this.update_status('<span class="entity-message">Edit '+ this.model.entity + ' </span>');
+           this.controller.editEntityButtonClick();
          }
       );
       
@@ -218,8 +213,8 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
       var view = this;
 
       var actions_selector = selector || '.element-action-button';
-      $(actions_selector).unbind('click');
 
+      $(actions_selector).unbind('click');
       $(actions_selector).bind('click',
 
         function(event) {
@@ -280,7 +275,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
         });
     
     },
-    
+
     this.state_changed = function(event) { /* State changed */
     	
       switch (event.state) {
@@ -315,14 +310,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
       	  break;    	
       	  
       	case 'entity_loaded': /* get executed */
-      	
-      	  if (this.model.configuration.action == 'edit') {
-      	  	this.editEntity(); 
-      	  }
-      	  else 
-      	    if (this.model.configuration.action == 'view') {
-      	      this.renderEntity();	
-      	    }
+      	  this.editEntity();
       	  break;
       	  
       	case 'error_loading_entity': /* get error */
@@ -335,7 +323,6 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
           this.update_status('<span class="entity-message entity-message-ok">'+ this.model.entity + ' created successfully</span>');
           
           if (this.model.configuration.action == 'new') {
-          	
           	  if (destination = this.model.configuration.search_params['destination']) {
           	    this.redirect_destination_or_base();
             	}
@@ -357,12 +344,6 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
           
           break; 
           
-       case 'error_creating_entity': /* error creating entity */
-          
-          this.update_status('<span class="entity-message entity-message-error">Error creating '+ this.model.entity + '</span>');         
-          this.notify_user('Error creating entity' , 'Server error creating entity');
-          break;  
-          
        case 'entity_updated': /* entity updated */
           
           this.update_status('<span class="entity-message entity-message-ok">'+ this.model.entity + ' updated successfully</span>');
@@ -371,23 +352,23 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
             if (destination = this.model.configuration.search_params['destination']) {
           	  this.redirect_destination_or_base();
             }
-            else {
-              if (!this.model.configuration.hold_form_after_action) {
-                this.renderEntity();
-              }
-            }
           }
           else
             if (this.model.configuration.action == 'list') {
               if (!this.model.configuration.hold_form_after_action) {
-                this.renderEntity(this.model.currentEntity());
                 this.updateEntityRow(this.model.currentEntity(), this.model.getEntityIndex());
-                this.elementMode();
+                this.pageMode();
               }              	
             }
       	  break;
       	  
-       case 'error_updating_entity': /* error creating entity */
+       case 'error_creating_entity': /* error creating entity */
+          
+          this.update_status('<span class="entity-message entity-message-error">Error creating '+ this.model.entity + '</span>');         
+          this.notify_user('Error creating entity' , 'Server error creating entity');
+          break;  
+
+       case 'error_updating_entity': /* error updating entity */
           
           this.update_status('<span class="entity-message entity-message-error">Error updating '+ this.model.entity + '</span>');
           this.notify_user('Error updating entity' , 'Server error updating entity');
@@ -440,41 +421,9 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
          this.model.entityHooks[idx].onRenderEntities(entities);	
        }	        	
      }       
-       
-     $('.elements-list').show();    
-     $('.bottom-navigation-bar').show();
-        
+
     };
-
-    this.updateEntityRow = function(entity, element_index) {
-  	  	
-      var elementHtml = this.templates.tmpl_element_in_the_list( {'entity':entity,'index':element_index, 'self':this} );
-  	
-  	  $('#element_row_'+element_index).replaceWith(elementHtml);
-  	
-    };
-    
-    this.renderEntity = function(event) { /* Render the current entity */
-
-      var entity = this.model.currentEntity();
-
-      var elementContainer = document.getElementById('element-detail');
-    
-      $(elementContainer).html( this.templates.tmpl_element({'entity':entity,'self':this}) );
-       
-      this.elementMode();
-     
-      // Process the Hooks
-      for (var idx=0; idx < this.model.entityHooks.length; idx++) {        	
-        if (this.model.entityHooks[idx].onRender) {
-          this.model.entityHooks[idx].onRender(entity);	
-        }	        	
-      }       
-
-      $('.bottom-navigation-bar').show();
-              
-    };
-  
+      
     this.newEntity = function() { /* Prepares for create a new entity */
     
       var elementFormContainer = document.getElementById('element-form-detail');
@@ -546,6 +495,25 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
        
     }
     
+    /* ----------- Update entity ----------------------- */
+
+    this.updateEntityRow = function(entity, element_index) {
+        
+      var elementHtml = this.templates.tmpl_element_in_the_list( {'entity':entity,'index':element_index, 'self':this} );
+    
+      var elementId = '#element_row_' + element_index;
+      $(elementId).replaceWith(elementHtml);    
+
+      // Reactivate the navigation detail
+      var controller = this.controller;
+      var navigationDetail = elementId + '.element-navigation-detail, ' + elementId + '.element-navigation-detail';
+      $(navigationDetail).bind('click',
+               function() {    
+                  controller.showEntityDetail(new Number($(this).attr('rel')));               
+               }); 
+
+    };
+
     /* ---------- Render entities ---------------------- */
     
     this.buildGui = function() { /* Renders the basic Gui */
@@ -616,9 +584,8 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
       var controller = this.controller;
                   
       $('.element-navigation-detail').bind('click',
-               function() {               	  
-               	  view.update_status('');
-               	  controller.showEntityDetail(new Number($(this).attr('rel')));
+               function() {    
+                  controller.showEntityDetail(new Number($(this).attr('rel')));           	  
                });            	  	
     }
     
@@ -644,7 +611,11 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
        $('.element-container').hide(); 
        $('.elements-container').show(); 
      
-       this.navigationBar();
+       $('.elements-list').show();    
+       $('.top-navigation-bar').show();
+       $('.bottom-navigation-bar').show();     
+     
+       this.navigationBar('.elements-container');
     	
     };
         
@@ -655,7 +626,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
        $('.element-container').show();
        
        this.configureElementEvents();
-       this.navigationBar();    	
+       this.navigationBar('.element-container');    	
     	
     };
 
@@ -666,6 +637,8 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
        
        this.configureFormEvents();
        this.configureElementEvents();
+       this.navigationBar('.element-form-container');
+
        htmlEditor('.texteditor'); // Converts the editor into HTML editors
     };
 
@@ -679,7 +652,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
 
     /* ------------------------------------------------ */
     
-    this.navigationBar = function() { /* Shows or hides the navigation bar */
+    this.navigationBar = function(container) { /* Configure the navigation bar */
 
        if (this.model.entitiesCount() > 0) {
          $('.elements-summary').html(this.model.summaryMessage());
@@ -688,10 +661,23 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
        else {
          $('.navigation-bar-nav-buttons').hide();
        }
-  	
+  	  
+      var barSelector = container + ' .top-navigation-bar';
+      var topPosition = $(barSelector).offset().top;
+
+      $(window).scroll(function(){
+          if ($(this).scrollTop() > topPosition ) {
+             $(barSelector).css('width', $('.entity-management').css('width'));
+             $(barSelector).css('position','fixed');
+             $(barSelector).css('top','0px');
+          }
+          else {
+             $(barSelector).css('position','static');
+          }
+        });
+
     }
-    
-  
+
     /* ------------------------------------------------ */
   
     this.redirect_destination_or_base = function() {

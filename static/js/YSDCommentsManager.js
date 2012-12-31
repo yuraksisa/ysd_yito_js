@@ -1,22 +1,27 @@
-define(['YSDEventTarget', 'YSDGui', 'YSDForms', 'ysdtemplate', 'jquery', 'YSDjson2', 'datejs', 'time'],function(YSDEventTarget, YSDGui, YSDForms, tmpl, $){
+define(['YSDEventTarget', 'YSDGui', 'YSDForms', 'ysdtemplate', 'jquery', 'YSDPager','YSDPagerFactory', 'YSDjson2', 'datejs', 'time', 'jquery.formparams', 'jquery.validate', 'jquery.ui'],
+       function(YSDEventTarget, YSDGui, YSDForms, tmpl, $, Pager, PagerFactory){
 	
-  YSDCommentsManager = function(comment_set_id) {
+  YSDCommentsManager = function(comment_set_id, pageSize, pager) {
   	
-  	this.model = new YSDCommentsModel(comment_set_id);
+  	this.model = new YSDCommentsModel(comment_set_id, pageSize);
   	this.controller = new YSDCommentsController(this.model);
-  	this.view = new YSDCommentsView(this.model, this.controller);
-  	
+  	this.view = new YSDCommentsView(this.model, this.controller, pager);
+  	this.model.view = this.view;
+
   	this.view.render();
   	
   }
   
-  YSDCommentsModel = function(comment_set_id) { /* The Model */
+  YSDCommentsModel = function(comment_set_id, pageSize) { /* The Model */
   	
   	this.state = 'none';
   	this.comment_set_id = comment_set_id;
   	this.comments = [];
   	this.total = 0;
+    this.pageSize = pageSize || 10;
+    this.currentPage = 1; /* The current page */
   	this.events = new YSDEventTarget(); 
+    this.view = null;
 
   	/* ------- Event listeners ---------- */
   	
@@ -30,25 +35,23 @@ define(['YSDEventTarget', 'YSDGui', 'YSDForms', 'ysdtemplate', 'jquery', 'YSDjso
   	
   	/* -------- Business methods ---------- */
   	
-  	this.retrieve_comments = function() {
-  	
+  	this.retrieve_comments = function(page) {
+  	   
+       this.currentPage = page || 1;
+
   	   if (this.comment_set_id == null) {
   	   	 return;
   	   }	
   		
   	   var self = this;
-  		
-  	   if (YSDGui.lockBackground) {
-	     YSDGui.lockBackground("#000000", false);
-  	   }  		
+  		 var url = '/comments/' + this.comment_set_id + '/page/' + this.currentPage;
   		
   	   $.ajax({
   	   	       type: 'GET',
-  	   	       url : '/comments/'+this.comment_set_id,
-  	   	       //contentType: 'application/json; charset=utf-8',
-  		       dataType : 'json',
-  		       contentType: 'json',
-  		       cache: false,
+  	   	       url : url,
+  		         dataType : 'json',
+  		         contentType: 'json',
+  		         cache: false,
   	   	       success: function(data, statusText, jqXHR) {
   	   	       	  console.log(data);
   	   	          self.comments = data.data;
@@ -59,37 +62,36 @@ define(['YSDEventTarget', 'YSDGui', 'YSDForms', 'ysdtemplate', 'jquery', 'YSDjso
   	   	       	  self.change_state('comments_retrieved_error');
   	   	       },
   	           complete : function(jqXHR, textStatus) {
-  	              if (YSDGui.unLockBackground) {
-  	                YSDGui.unLockBackground();	
-  	              }	
+  	              // none
   	          }
   	   });
   		
   	}
   	
   	this.post_comment = function(message) {
-  	
-  	    delete message['post'];
+
+      if (!$($('.post-button')[0].form).valid()) {
+        this.view.notify_user('Validation errors', 'Check the form. There are errors');
+        return; 
+      }
+
+  	  delete message['post'];
   	   
-  	    var self = this;
+  	  var self = this;
   	  
-  	    if (message.comment_set.id == '') {
-  	      delete message.comment_set.id;	
-  	    }
+  	  if (message.comment_set.id == '') {
+  	    delete message.comment_set.id;	
+  	  }
   	    
-  	  	var json_request = encodeURIComponent(JSON.stringify(message));
+  	  var json_request = encodeURIComponent(JSON.stringify(message));
   		
-  		if (YSDGui.lockBackground) {
-	      YSDGui.lockBackground("#000000", false);
-  	    }
+      YSDGui.lockBackground("#000000", false);
   		
   		$.ajax( {
   			type   : 'POST',
   			url    : '/comment',  			
   			data   : json_request,
-//  			data_type : 'application/json; charset=utf-8',  			
-  		    data_type : 'json',
-//  			content_type : 'json',
+ 		    data_type : 'json',
   			success : function(data, textStatus, jqXHR) {
   			  if (!self.comment_set_id) {
   			    self.comment_set_id = data.comment_set_id;
@@ -165,12 +167,14 @@ define(['YSDEventTarget', 'YSDGui', 'YSDForms', 'ysdtemplate', 'jquery', 'YSDjso
   	
   }
   
-  YSDCommentsView = function(model, controller) { /* The View */
+  YSDCommentsView = function(model, controller, pagerId) { /* The View */
   	
-  	this.model = model;                   /* Reference to the model */
-  	this.controller = controller;         /* Reference to the controller */
-  	this.tmpl_comments_holder = null;     /* The template to render the comment set */
-  	this.tmpl_comment = null;             /* The template to render a comment */
+  	this.model = model;                     /* Reference to the model */
+  	this.controller = controller;           /* Reference to the controller */
+    this.pagerId = pagerId || 'page_list';  /* The pager id*/
+    this.pager = null;                      /* The pager */
+  	this.tmpl_comments_holder = null;       /* The template to render the comment set */
+  	this.tmpl_comment = null;               /* The template to render a comment */
   	
   	this.configure_events = function() {
   	  var self = this;  	
@@ -214,7 +218,8 @@ define(['YSDEventTarget', 'YSDGui', 'YSDForms', 'ysdtemplate', 'jquery', 'YSDjso
   	   
   	    case 'post_comment_sent':
   	     this.update_comments();
-  	     break;
+  	     this.reset_form();
+         break;
   	   
   	    case 'reply_message_sent_error':
   	     this.notify_user('Error','Error posting message');
@@ -230,12 +235,11 @@ define(['YSDEventTarget', 'YSDGui', 'YSDForms', 'ysdtemplate', 'jquery', 'YSDjso
   	  }	 
   	  
   	  var comments_container = document.getElementById('comments-container');
-  	  
   	  comments_container.innerHTML = this.tmpl_comments_holder({comment_set_id : this.model.comment_set_id, self: this }); 	  
   	  
   	  this.configure_post_form();
 
-	  this.model.retrieve_comments(); // Order to retrieve the comments
+	    this.model.retrieve_comments(); // Order to retrieve the comments
   	    	
   	}
   	
@@ -251,15 +255,39 @@ define(['YSDEventTarget', 'YSDGui', 'YSDForms', 'ysdtemplate', 'jquery', 'YSDjso
   	  if (this.tmpl_comment == null) {
   	  	this.tmpl_comment = tmpl('comment_script');	
   	  }	
-  	  
-  	  var comments_element = document.getElementById('comments_holder');
-  	  var messageHtml = '';
+  	   
+      this.configure_pager();
+
+      // Render the comments
+      var messageHtml = '';
   	  for (var index = 0; index < comments.length; index++){
   	    messageHtml += this.tmpl_comment({comment:comments[index], self:this, index: index});	
   	  }
+      var comments_element = document.getElementById('comments_holder');
   	  comments_element.innerHTML = messageHtml;
   	  
   	},
+
+    this.configure_pager = function() { /* Configure the pager */
+
+      controller_class = PagerFactory.getPagerController(this.pagerId);
+      view_class = PagerFactory.getPagerView(this.pagerId); 
+
+      pagerController = new controller_class();
+      pagerView = new view_class('comments_pagination');
+      
+      var self = this;
+
+      $('#comments_pagination').empty();
+
+      if (this.model.total > this.model.pageSize) {
+        this.pager = new Pager(this.model.pageSize, this.model.currentPage, this.model.total, pagerController, pagerView);
+        this.pager.addListener('navigate', function(data) {
+          self.model.retrieve_comments(data.page);
+        });
+      }
+
+    }
   	
   	this.update_comments = function () { /* Update the conversation with the last sent message */
   	  	  
@@ -278,6 +306,10 @@ define(['YSDEventTarget', 'YSDGui', 'YSDForms', 'ysdtemplate', 'jquery', 'YSDjso
   	    	  	
   	}
   	
+    this.reset_form = function() {
+      $('.post-button')[0].form.reset();
+    }
+
   	this.notify_user = function(title, message) {
   		
         $("<div title='" + title + "'>" + message + "</div>").dialog( { height: 160, modal: true,     	 
@@ -310,13 +342,17 @@ define(['YSDEventTarget', 'YSDGui', 'YSDForms', 'ysdtemplate', 'jquery', 'YSDjso
          cleartime_comment_date = (new Date(comment_date.getTime())).clearTime();
        } 
                   
-       return Date.equals(cleartime_comment_date, today)?comment_date.toString("HH:mm"):comment_date.getFullYear()==today.getFullYear()?comment_date.toString("d MMM, HH:mm"):comment_date.toString("d-MM-yy, HH:mm");	
+       return Date.equals(cleartime_comment_date, today)?comment_date.toString("HH:mm"):comment_date.getFullYear()==today.getFullYear()?comment_date.toString("d MMM, HH:mm"):comment_date.toString("d.MM.yy, HH:mm");	
     
     }
     
     this.format_sender_url = function(comment) { /* Format the sender */
       
-      return comment.publisher_account;   
+      if (comment.composer_user == null || comment.composer_user == '' || comment.composer_user == 'anonymous') {
+        return comment.composer_name;
+      }
+      
+      return comment.composer_user;   
     
     }
   

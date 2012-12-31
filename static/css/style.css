@@ -224,6 +224,10 @@
 	
 }
 
+.elements-header {
+  margin-bottom: 5px;
+}
+
 .elements-description {
 	
 }
@@ -334,19 +338,18 @@
 /* ------ ELEMENT form --------- */
 
 .element-form-container {
-  border: 1px solid #EEE;
-  border-radius: 5px;
- -webkit-border-radius: 5px;
- -moz-border-radius: 5px;	
- padding: 5px;
+ /*padding: 5px;*/
 }
 
 .element-form-detail {
-
+  border: 1px solid #EEE;
+  border-radius: 5px;
+ -webkit-border-radius: 5px;
+ -moz-border-radius: 5px; 
+  padding: 5px;
 }
 
 .form-fields  {	
- padding: 5px;
  margin-top: 5px;
  margin-bottom: 5px;
  //border: 1px solid gray;
@@ -405,21 +408,25 @@
 
 .top-navigation-bar {
  
- padding-bottom: 5px;
+ padding: 5px;
  margin-bottom: 5px;
- border-bottom : 1px solid gray;
+ border-top : 1px solid #DDD;
+ border-bottom : 1px solid #DDD;
+ background: #EEE;
+ z-index: 9999;
 
 }
 
 .elements-summary {
- margin-right: 10px;	
+ margin-right: 10px;  
 }
 
 .bottom-navigation-bar {
 
- padding-top: 5px;
- border-top : 1px solid gray;
+ padding: 5px;
+ border-top : 1px solid #DDD;;
  clear: both;
+ margin-bottom: 10px;
  
 }
 
@@ -452,7 +459,10 @@
 }
 
 .page-navigation { // Button to change from entity navigation to page navigation
-	
+  border: none;
+  background: none;
+  text-decoration: underline;	
+  float: left;
 }
 
 /* ------ Crud Buttons ------ */
@@ -631,7 +641,7 @@ Supports Thumbs: true
 
 .theme-default .nivoSlider {
 	position:relative;
-	background:#fff url(../img/loading.gif) no-repeat 50% 50%;
+	background:#fff url(loading.gif) no-repeat 50% 50%;
     margin-bottom:10px;
     -webkit-box-shadow: 0px 1px 5px 0px #4a4a4a;
     -moz-box-shadow: 0px 1px 5px 0px #4a4a4a;
@@ -656,7 +666,7 @@ Supports Thumbs: true
 	display:inline-block;
 	width:22px;
 	height:22px;
-	background:url(../img/bullets.png) no-repeat;
+	background:url(bullets.png) no-repeat;
 	text-indent:-9999px;
 	border:0;
 	margin: 0 2px;
@@ -669,7 +679,7 @@ Supports Thumbs: true
 	display:block;
 	width:30px;
 	height:30px;
-	background:url(../img/arrows.png) no-repeat;
+	background:url(arrows.png) no-repeat;
 	text-indent:-9999px;
 	border:0;
 	opacity: 0;

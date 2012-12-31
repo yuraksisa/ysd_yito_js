@@ -18,9 +18,7 @@ define(function(){
   	/* ========= Element detail ================= */
   	
   	this.showEntityDetail = function(entityIndex) {
-  		
   	  this.model.setEntityIndex(entityIndex);
-  		
   	};
   	
   	/* ========= Navigation buttons ============= */

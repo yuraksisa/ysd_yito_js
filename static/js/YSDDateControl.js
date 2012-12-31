@@ -117,11 +117,11 @@ define(['jquery'], function($){
     };   
          
     this.getMonths = function() { /* Get the months */
-   	  return YsdDateControlModelData[this.locale].months;
+   	  return YSDDateControlModelData[this.locale].months;
     };
       
     this.getYears = function() { /* Get the years */
-   	  return YsdDateControlModelData.years;
+   	  return YSDDateControlModelData.years;
     };
 	
   }
@@ -232,7 +232,7 @@ define(['jquery'], function($){
   	
        // days 
        var comboDayLiteral = document.createElement('option');
-       comboDayLiteral.text = comboDayLiteral.innerText = YsdDateControlModelData[model.locale].literals['day'];
+       comboDayLiteral.text = comboDayLiteral.innerText = YSDDateControlModelData[model.locale].literals['day'];
        comboDay.appendChild(comboDayLiteral);
   	  
   	   var days = model.days_of_month || 31;
@@ -246,7 +246,7 @@ define(['jquery'], function($){
   	
   	   // months
        var comboMonthLiteral = document.createElement('option');
-       comboMonthLiteral.text = comboMonthLiteral.innerText = YsdDateControlModelData[model.locale].literals['month'];
+       comboMonthLiteral.text = comboMonthLiteral.innerText = YSDDateControlModelData[model.locale].literals['month'];
        comboMonth.appendChild(comboMonthLiteral);
   	 
   	   var months = model.getMonths(); 
@@ -262,7 +262,7 @@ define(['jquery'], function($){
   	 
   	   // years  	 
        var comboYearLiteral = document.createElement('option');
-       comboYearLiteral.text = comboYearLiteral.innerText = YsdDateControlModelData[model.locale].literals['year'];
+       comboYearLiteral.text = comboYearLiteral.innerText = YSDDateControlModelData[model.locale].literals['year'];
        comboYear.appendChild(comboYearLiteral);
 
        var start_year = new Date().getFullYear();

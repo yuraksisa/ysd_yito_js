@@ -65,6 +65,8 @@ define(['jquery', 'ysdtemplate'], function($, tmpl){
    	   this.createRow(data[idx]);
       }
  	
+      this.controller.events.fireEvent('elements_updated');
+
     }
  
     this.createRow = function(element) { /* Create an element */
