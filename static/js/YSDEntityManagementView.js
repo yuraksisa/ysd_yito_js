@@ -205,6 +205,45 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
       }
     	
     }
+
+    this.configureBackLink = function() { /* Configure the back button */
+
+      if (this.model.configuration.search_params['destination']) {
+        $('#back').attr('href', this.model.configuration.search_params['destination']);
+        $('.back-bar').show();
+      }
+      else {
+        $('.back-bar').hide();
+      }
+
+    }
+
+    this.configureTabs = function() { /* Configure the tabs */
+
+      // Tabs above
+      $('#tabs_above').tabs().addClass('ui-tabs-vertical ui-helper-clearfix');
+      $('#tabs_above li').removeClass('ui-corner-top').addClass('ui-corner-left');
+      
+      // Tabs below
+      $('#tabs').tabs();
+
+      if ($('#tabs_above ul').children().length) {
+        $('#tabs_above').show();
+      }
+
+      if ($('#tabs ul').children().length) {
+        $('#show_tabs').show();
+        $('#show_tabs').toggle(function() {
+           $('#tabs').show();
+        }, function() {
+           $('#tabs').hide();
+        });
+      }
+      else {
+        $('#show_tabs').hide();
+      }
+
+    }
     
     this.configureElementEvents = function(selector) { /* Configure the element actions */
 
@@ -349,8 +388,10 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
           this.update_status('<span class="entity-message entity-message-ok">'+ this.model.entity + ' updated successfully</span>');
           
           if (this.model.configuration.action == 'edit') {
-            if (destination = this.model.configuration.search_params['destination']) {
-          	  this.redirect_destination_or_base();
+            if (!this.model.configuration.hold_form_after_action) {
+              if (destination = this.model.configuration.search_params['destination']) {
+          	    this.redirect_destination_or_base();
+              }
             }
           }
           else
@@ -430,7 +471,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
      
       $(elementFormContainer).html( this.templates.tmpl_element_form({'entity':null,'self':this}));
       
-      this.formElementMode();
+      this.formElementMode('new');
 
       // Process the Hooks
       for (var idx=0; idx < this.model.entityHooks.length; idx++) {        	
@@ -449,7 +490,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
      
       $(elementFormContainer).html( this.templates.tmpl_element_form({'entity':entity,'self':this}) );
       
-      this.formElementMode();
+      this.formElementMode('edit');
 
       // Process the Hooks
       for (var idx=0; idx < this.model.entityHooks.length; idx++) {        	
@@ -610,11 +651,14 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
        $('.element-form-container').hide();
        $('.element-container').hide(); 
        $('.elements-container').show(); 
+       
+       $('.element_actions').hide();
+       $('.elements_actions').show();
      
        $('.elements-list').show();    
        $('.top-navigation-bar').show();
        $('.bottom-navigation-bar').show();     
-     
+
        this.navigationBar('.elements-container');
     	
     };
@@ -624,21 +668,37 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
        $('.element-form-container').hide();	
        $('.elements-container').hide();
        $('.element-container').show();
+
+       $('.element_actions').hide();
+       $('.elements_actions').hide();
        
        this.configureElementEvents();
        this.navigationBar('.element-container');    	
     	
     };
 
-    this.formElementMode = function() { /* Form Element Mode (edit/create new entity) */	
+    this.formElementMode = function(action) { /* Form Element Mode (edit/create new entity) */	
        $('.elements-container').hide();
        $('.element-container').hide();    
        $('.element-form-container').show();
-       
+      
+       if (action == 'new') {
+         $('.element_actions').hide();
+       } 
+       else {
+         $('.element_actions').show();
+       }
+       $('.elements_actions').hide();
+      
        this.configureFormEvents();
        this.configureElementEvents();
        this.navigationBar('.element-form-container');
 
+       if (this.model.configuration.action != 'list') {
+         this.configureBackLink();
+       }
+
+       this.configureTabs(); // Configure the tabs
        htmlEditor('.texteditor'); // Converts the editor into HTML editors
     };
 

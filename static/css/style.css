@@ -402,8 +402,27 @@
   float: left;	
 }
 
+.form-crud-buttons {
+  float: right;   
+}
+
 .navigation-bar-nav-buttons {
  float: right;	
+}
+
+.elements_actions {
+  margin-top: 5px;
+  float: right;
+}
+
+.element_actions {
+  margin-top: 5px;
+  float: right;
+}
+
+.element_action_submenu { /* To align to the left */
+  left: auto; 
+  right: 0;
 }
 
 .top-navigation-bar {

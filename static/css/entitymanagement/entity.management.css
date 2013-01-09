@@ -199,6 +199,15 @@
  float: right;	
 }
 
+.crud-buttons {
+ float: right;  
+}
+
+.entity-actions {
+  margin-top: 5px;
+  border-top: 1px dashed black;
+}
+
 .top-navigation-bar {
  
  padding: 5px;

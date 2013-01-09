@@ -146,8 +146,20 @@ define(['YSDArrayDataModel', 'YSDEntityManagementModel', 'YSDEntityManagementCon
       this.model.urls.query_url  += parentId; 
     }
   
+    this.configureHooks = function() { /* Set up the manager of the hooks */
+      var hooks = this.model.entityHooks;
+      var length = hooks.length;
+      for (var idx=0;idx<length;idx++) {
+        hooks[idx].manager = this;
+      }
+
+    }
+     
+    this.configureHooks();
     this.view.init();
-       
+    
+
+
   };
     
   return YSDEntityManagement;
