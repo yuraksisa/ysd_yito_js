@@ -628,7 +628,7 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
         }	        	
       }
   	  
-  	  var the_data = this.synchronizeCurrentEntity(the_data);
+  	  /*the_data = this.synchronizeCurrentEntity(the_data);*/ /* 2013.02.02 Avoid updating not modified fields */
   	    	    	    	    	  
   	  the_data = encodeURIComponent(JSON.stringify(the_data));
   	  

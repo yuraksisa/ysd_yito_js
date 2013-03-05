@@ -5,6 +5,7 @@ requirejs.config({
 	paths: {
 		"jquery"               : "jquery-1.8.2", // "jquery-1.8.2.min"
 		"jquery.ui"            : "jquery-ui-1.9.0", // "jquery-ui-1.8.13.custom.min"
+		"jquery.ui.datepicker" : "jquery.ui.datepicker-es",
 		"jquery.ui.timepicker" : "jquery-ui-timepicker-addon",
 		"jquery.tools"         : "jquery.tools.min", //
 		"jquery.validate"      : "jquery.validate",
@@ -19,6 +20,7 @@ requirejs.config({
 	shim: {
       "jquery.tools" : ['jquery'],
       "jquery.ui"    : ['jquery'],
+      "jquery.ui.datepicker" : ['jquery', 'jquery.ui'],
       "jquery.ui.timepicker" : ['jquery', 'jquery.ui'],
       "jquery.validate" : ['jquery'],
       "jquery.formparams" : ['jquery'],

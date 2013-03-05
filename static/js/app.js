@@ -4,9 +4,11 @@
 //
 requirejs(['jquery',
            'jquery.ui',
+           'jquery.ui.datepicker',
            'jquery.ui.timepicker',
            'jquery.tools',
            'jquery.validate', 
+           'jquery.ui.datepicker.validation',
            'jquery.formparams',
            'jquery.wysiwyg', 
            'jquery.ad-gallery', 

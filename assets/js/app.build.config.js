@@ -7,6 +7,7 @@ requirejs.config({
 		"jquery.ui"           : "jquery-ui-1.8.13.custom.min",
 		"jquery.tools"        : "jquery.tools.min",
 		"jquery.validate"     : "jquery.validate",
+		"jquery.ui.datepicker.validation" : "jquery.ui.datepicker.validation",
 		"jquery.formparams"   : "jquery.formparams",
 		"jquery.cookie"       : "jquery.cookie",
 		"jquery.nivo.slider"  : "jquery.nivo.slider.pack",
@@ -20,6 +21,7 @@ requirejs.config({
       "jquery.tools" : ['jquery'],
       "jquery.ui"    : ['jquery'],
       "jquery.validate" : ['jquery'],
+      'jquery.ui.datepicker.validation' : ['jquery', 'jquery.ui', 'jquery.validate']
       "jquery.formparams" : ['jquery'],
       "jquery.cookie" : ['jquery'],
       "jquery.ad-gallery" : ['jquery'],

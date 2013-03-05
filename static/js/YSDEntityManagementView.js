@@ -220,19 +220,34 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
 
     this.configureTabs = function() { /* Configure the tabs */
 
-      // Tabs above
+      // Tabs above (vertical tabs)
       $('#tabs_above').tabs().addClass('ui-tabs-vertical ui-helper-clearfix');
       $('#tabs_above li').removeClass('ui-corner-top').addClass('ui-corner-left');
       
+      if ($('#tabs_above ul').children().length) {
+        
+        if ($('#tabs_above ul').children().length == 1) {
+          $('#tabs_above ul').hide();
+          $('#tabs_above .ui-tabs-panel').css('width', 'auto');
+          $('#tabs_above .ui-tabs-panel').css('float', 'none');
+          $('#tabs_above .ui-tabs-panel').css('padding', '0px 10px');
+        }
+
+        $('#tabs_above').show();
+
+      }
+
       // Tabs below
       $('#tabs').tabs();
 
-      if ($('#tabs_above ul').children().length) {
-        $('#tabs_above').show();
-      }
-
       if ($('#tabs ul').children().length) {
+
+        if ($('#tabs ul').children().length == 1) {
+          $('#tabs ul').hide();
+        }
+
         $('#show_tabs').show();
+  
         $('#show_tabs').toggle(function() {
            $('#tabs').show();
         }, function() {
@@ -727,7 +742,10 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
 
       $(window).scroll(function(){
           if ($(this).scrollTop() > topPosition ) {
-             $(barSelector).css('width', $('.entity-management').css('width'));
+             var barWidth = parseInt($('.entity-management').css('width').replace('px','')) - 
+                         parseInt($('.top-navigation-bar').css('padding-left').replace('px','')) - 
+                         parseInt($('.top-navigation-bar').css('padding-right').replace('px',''));
+             $(barSelector).css('width', new String(barWidth) + 'px');
              $(barSelector).css('position','fixed');
              $(barSelector).css('top','0px');
           }

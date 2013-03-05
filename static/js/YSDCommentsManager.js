@@ -348,11 +348,11 @@ define(['YSDEventTarget', 'YSDGui', 'YSDForms', 'ysdtemplate', 'jquery', 'YSDPag
     
     this.format_sender_url = function(comment) { /* Format the sender */
       
-      if (comment.composer_user == null || comment.composer_user == '' || comment.composer_user == 'anonymous') {
+      if (comment.composer_username == null || comment.composer_username == '' || comment.composer_username == 'anonymous') {
         return comment.composer_name;
       }
       
-      return comment.composer_user;   
+      return comment.composer_username;   
     
     }
   

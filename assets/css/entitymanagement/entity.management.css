@@ -224,7 +224,12 @@
  padding-top: 5px;
  border-top : 1px solid gray;
  clear: both;
- 
+ margin-bottom: 10px;
+
+}
+
+.bottom-navigation-bar .navigation-bar-crud-buttons {
+  float: right;
 }
 
 /* ----- Buttons ------ */
