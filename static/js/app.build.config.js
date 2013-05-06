@@ -3,24 +3,24 @@ requirejs.config({
 	//baseUrl: 'static/js',
 	
 	paths: {
-		"jquery"               : "jquery-1.8.2", // "jquery-1.8.2.min"
-		"jquery.ui"            : "jquery-ui-1.9.0", // "jquery-ui-1.8.13.custom.min"
-		"jquery.ui.datepicker" : "jquery.ui.datepicker-es",
-		"jquery.ui.timepicker" : "jquery-ui-timepicker-addon",
-		"jquery.tools"         : "jquery.tools.min", //
-		"jquery.validate"      : "jquery.validate",
-		"jquery.formparams"    : "jquery.formparams",
-		"jquery.cookie"        : "jquery.cookie",
-		"jquery.nivo.slider"   : "jquery.nivo.slider.pack", // "jquery.nivo.slider.pack"
-		"jquery.placeholder"   : "jquery.placeholder",
-		"json2"                : "json2",
-		"datejs"               : "date-es-ES"
+		"jquery"                  : "jquery-1.8.2", // "jquery-1.8.2.min"
+		"jquery.ui"               : "jquery-ui-1.9.0", // "jquery-ui-1.8.13.custom.min"
+		"jquery.ui.datepicker-es" : "jquery.ui.datepicker-es",
+		"jquery.ui.timepicker"    : "jquery-ui-timepicker-addon",
+		"jquery.tools"            : "jquery.tools.min", //
+		"jquery.validate"         : "jquery.validate",
+		"jquery.formparams"       : "jquery.formparams",
+		"jquery.cookie"           : "jquery.cookie",
+		"jquery.nivo.slider"      : "jquery.nivo.slider.pack", // "jquery.nivo.slider.pack"
+		"jquery.placeholder"      : "jquery.placeholder",
+		"json2"                   : "json2",
+		"datejs"                 : "date-es-ES"
 	},
 
 	shim: {
       "jquery.tools" : ['jquery'],
       "jquery.ui"    : ['jquery'],
-      "jquery.ui.datepicker" : ['jquery', 'jquery.ui'],
+      "jquery.ui.datepicker-es" : ['jquery', 'jquery.ui'],
       "jquery.ui.timepicker" : ['jquery', 'jquery.ui'],
       "jquery.validate" : ['jquery'],
       "jquery.formparams" : ['jquery'],

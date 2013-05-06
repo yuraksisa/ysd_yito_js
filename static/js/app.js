@@ -4,7 +4,7 @@
 //
 requirejs(['jquery',
            'jquery.ui',
-           'jquery.ui.datepicker',
+           'jquery.ui.datepicker-es',
            'jquery.ui.timepicker',
            'jquery.tools',
            'jquery.validate', 

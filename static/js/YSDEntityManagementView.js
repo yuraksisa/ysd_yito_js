@@ -151,14 +151,14 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
       // Crud buttons
       $('.new-entity-button').bind('click',    
          function(event) {
-         	view.update_status('<span class="entity-message">New '+ model.entity + ' </span>');  
+         	view.update_status('<div class="entity-message">New '+ model.entity + ' </div>');  
          	controller.newEntityButtonClick(); 
          }
        );
       
       $('.edit-entity-button').bind('click',   
          function(event) { 
-           this.update_status('<span class="entity-message">Edit '+ this.model.entity + ' </span>');
+           this.update_status('<div class="entity-message">Edit '+ this.model.entity + ' </div>');
            this.controller.editEntityButtonClick();
          }
       );
@@ -231,6 +231,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
           $('#tabs_above .ui-tabs-panel').css('width', 'auto');
           $('#tabs_above .ui-tabs-panel').css('float', 'none');
           $('#tabs_above .ui-tabs-panel').css('padding', '0px 10px');
+          $('#tabs_above .ui-tabs-panel').css('border', 'none');
         }
 
         $('#tabs_above').show();
@@ -343,7 +344,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
            break;
 
         case 'action_executed':
-           this.update_status('<span class="entity-message entity-message-ok">action executed successfully</span>');        
+           this.update_status('<div class="entity-message entity-message-ok">action executed successfully</div>');        
            break;
 
         case 'action_executed_error':
@@ -374,7 +375,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
         
         case 'entity_created': /* entity created  */
           
-          this.update_status('<span class="entity-message entity-message-ok">'+ this.model.entity + ' created successfully</span>');
+          this.update_status('<div class="entity-message entity-message-ok">'+ this.model.entity + ' created successfully</div>');
           
           if (this.model.configuration.action == 'new') {
           	  if (destination = this.model.configuration.search_params['destination']) {
@@ -400,7 +401,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
           
        case 'entity_updated': /* entity updated */
           
-          this.update_status('<span class="entity-message entity-message-ok">'+ this.model.entity + ' updated successfully</span>');
+          this.update_status('<div class="entity-message entity-message-ok">'+ this.model.entity + ' updated successfully</div>');
           
           if (this.model.configuration.action == 'edit') {
             if (!this.model.configuration.hold_form_after_action) {
@@ -420,13 +421,13 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
       	  
        case 'error_creating_entity': /* error creating entity */
           
-          this.update_status('<span class="entity-message entity-message-error">Error creating '+ this.model.entity + '</span>');         
+          this.update_status('<div class="entity-message entity-message-error">Error creating '+ this.model.entity + '</div>');         
           this.notify_user('Error creating entity' , 'Server error creating entity');
           break;  
 
        case 'error_updating_entity': /* error updating entity */
           
-          this.update_status('<span class="entity-message entity-message-error">Error updating '+ this.model.entity + '</span>');
+          this.update_status('<div class="entity-message entity-message-error">Error updating '+ this.model.entity + '</div>');
           this.notify_user('Error updating entity' , 'Server error updating entity');
           break;       	  
           
@@ -435,7 +436,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
           break;
           
        case 'error_deleting_all_entities': /* Error deleting all entities */
-          this.update_status('<span class="entity-message entity-message-error">Error deleting all '+ this.model.entity + '</span>');
+          this.update_status('<div class="entity-message entity-message-error">Error deleting all '+ this.model.entity + '</div>');
           this.notify_user('Error deleting all entities' , 'Server error deleting all entities');          
           break;
           
@@ -444,7 +445,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
           break;
           
        case 'error_deleting_entity': /* Error deleting entity */
-          this.update_status('<span class="entity-message entity-message-error">Error deleting '+ this.model.entity + '</span>');
+          this.update_status('<div class="entity-message entity-message-error">Error deleting '+ this.model.entity + '</div>');
           this.notify_user('Error deleting entity' , 'Server error deleting entity');        
           break;   
           
@@ -751,6 +752,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
           }
           else {
              $(barSelector).css('position','static');
+             $(barSelector).css('width', 'auto');
           }
         });
 

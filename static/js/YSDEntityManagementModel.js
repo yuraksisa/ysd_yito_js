@@ -169,6 +169,9 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	this.extractConfigurationFromURL = function() { /* Extract configuration attributes (url_base, action, id, parentId, search_params) from the URL */
   	  	
   	  var the_url = window.location.pathname;
+      if (this.configuration.prefix) {
+        the_url = the_url.replace(this.configuration.prefix, '');
+      }
       var parts = the_url.split('/');
 
       // Removes the language from the parts before processing them
