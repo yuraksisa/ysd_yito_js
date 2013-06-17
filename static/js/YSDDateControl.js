@@ -160,8 +160,8 @@ define(['jquery'], function($){
   
   YSDDateControlView = function(controller, model, comboDay, comboMonth, comboYear, hiddenDate)
   {
-    var controller = controller;
-    var model = model;
+    this.controller = controller;
+    this.model = model;
   
     this.comboDay = comboDay;     
     this.comboMonth = comboMonth; 
@@ -171,7 +171,7 @@ define(['jquery'], function($){
     /* The view is notified of changes in the model */
   	
     this.data_changed = function (information) { 
-  	
+
   	  switch (information) {
   	 	
   	    case 'days_of_month' : /* days of month */
@@ -228,7 +228,7 @@ define(['jquery'], function($){
 		
     /* Builds the control */	
 	
-    var render = function() { 
+    this.render = function() { 
   	
        // days 
        var comboDayLiteral = document.createElement('option');
@@ -295,7 +295,7 @@ define(['jquery'], function($){
   	    
     }
 	
-    render();	
+    this.render();	
 	
   }
 

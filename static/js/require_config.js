@@ -10,6 +10,8 @@
 
 var require = {
 	
+	/*enforceDefine: true,*/
+	
 	baseUrl: '/assets/js',
 	
 	paths: {

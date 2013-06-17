@@ -68,7 +68,7 @@ define(function(){
   	  this.view.ask_for_confirmation('Delete entity', 
   	                                 'Are you sure you want to delete this entity? This process can not be undone.',
   	                                 function(){
-  	                                 	model.delete();
+  	                                 	model.deleteCurrent();
   	                                 });
   	};
   	

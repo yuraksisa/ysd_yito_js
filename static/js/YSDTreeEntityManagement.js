@@ -1,5 +1,5 @@
-define(['YSDTreeDataModel', 'YSDEntityManagementModel', 'YSDEntityManagementController', 'YSDEntityManagementView'], 
-       function(TreeDataModel, EntityModel, EntityController, EntityView){
+define(['YSDTreeDataModel', 'YSDEntityManagementModel', 'YSDEntityManagementController', 'YSDEntityManagementView', 'ysdtemplate'], 
+       function(TreeDataModel, EntityModel, EntityController, EntityView, tmpl){
 	
   function YSDTreeEntityManagement(urls, entity, pageSize, entityHooks, configuration) { /* Tree Entity Management constructor */
 
@@ -14,6 +14,17 @@ define(['YSDTreeDataModel', 'YSDEntityManagementModel', 'YSDEntityManagementCont
       var parentId = '/' + this.model.configuration.parentId;
       this.model.urls.query_url  += parentId; 
     }
+  
+    this.configureHooks = function() { /* Set up the manager of the hooks */
+      var hooks = this.model.entityHooks;
+      var length = hooks.length;
+      for (var idx=0;idx<length;idx++) {
+        hooks[idx].manager = this;
+      }
+
+    }
+     
+    this.configureHooks();
   
     this.view.init();
   	
@@ -45,7 +56,7 @@ define(['YSDTreeDataModel', 'YSDEntityManagementModel', 'YSDEntityManagementCont
  
      this.renderEntityDataOneItem = function(entity, level) {
   	
-  	   var elementHtml = this.templates.tmpl_element_in_the_list( {'entity':entity, 'level':level, 'index':this.index, 'self':this});
+  	   var elementHtml = tmpl('elements_list_template', {'entity':entity, 'level':level, 'index':this.index, 'self':this});
   	   this.index++;
   	  	
   	   if (entity.children.length > 0) {

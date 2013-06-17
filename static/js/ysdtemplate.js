@@ -5,7 +5,7 @@ define(function() {
 
   var cache = {};
   
-  var tmpl = function tmpl(str, data){
+  var template = function tmpl(str, data){
     // Figure out if we're getting a template, or if we need to
     // load the template - and be sure to cache the result.
     var fn = !/\W/.test(str) ?
@@ -15,7 +15,7 @@ define(function() {
       // Generate a reusable function that will serve as a template
       // generator (and which will be cached).
       new Function("obj",
-        "var p=[],print=function(){p.push.apply(p,arguments);};" +
+        "var p=[], print=function(){p.push.apply(p,arguments);};" +
         
         // Introduce the data as local variables using with(){}
         "with(obj){p.push('" +
@@ -24,8 +24,8 @@ define(function() {
         str
           .replace(/[\r\t\n]/g, " ")
           .split("<%").join("\t")
-          .replace(/((^|%>)[^\t]*)'/g, "$1\r")
-          .replace(/\t=(.*?)%>/g, "',$1,'")
+          .replace(/((^|%>)[^\t]*)'/g, "$1\r")  // replace code
+          .replace(/\t=(.*?)%>/g, "',$1,'")     // replace variable
           .split("\t").join("');")
           .split("%>").join("p.push('")
           .split("\r").join("\\'")
@@ -35,6 +35,6 @@ define(function() {
     return data ? fn( data ) : fn;
   };
  
-  return tmpl;
+  return template;
 
 });

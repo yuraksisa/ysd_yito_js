@@ -667,7 +667,7 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	};
   	
   	
-  	this.delete = function(callback) { /* Delete an existing instance */
+  	this.deleteCurrent = function(callback) { /* Delete an existing instance */
   		
   	  this.change_state('entity_delete');
   	  

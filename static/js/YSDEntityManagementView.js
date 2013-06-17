@@ -15,48 +15,6 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
   
   function EntityView(entityController) { /* Entity View constructor */
     
-    this.templates = {};
-    
-    if (document.getElementById('elements_title')) {
-      this.templates.tmpl_elements_title = tmpl('elements_title');
-    }
-    else {
-      this.templates.tmpl_elements_title = null;
-    }
-
-    if (document.getElementById('elements_description')) {
-      this.templates.tmpl_element_description = tmpl('elements_description');	
-    }
-  
-    if (document.getElementById('elements_search')) {
-      this.templates.tmpl_elements_search = tmpl('elements_search');
-    }
-    else
-    {
-      this.templates.tmpl_elements_search = null;
-    }
-
-    if (document.getElementById('elements_no_data')) {
-  	  this.templates.tmpl_elements_no_data = tmpl('elements_no_data');
-    } 
-  
-    if (document.getElementById('elements_container_template')) {
-      this.templates.tmpl_element_list = tmpl('elements_container_template');
-    }
-  
-    if (document.getElementById('elements_list_template')) {
-      this.templates.tmpl_element_in_the_list = tmpl('elements_list_template');
-    }
-  
-    if (document.getElementById('element_template')) {
-      this.templates.tmpl_element = tmpl('element_template');
-    }
-  
-    if (document.getElementById('element_template_form')) {
-      this.templates.tmpl_element_form = tmpl('element_template_form');
-    }
-    
-
     this.navigationAction = null;
     this.controller = entityController;
     
@@ -467,11 +425,19 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
        this.buildEntitiesList(entities);
      }
      else {
-       $('.elements-list').html(this.templates.tmpl_elements_no_data({}));	
+       $('.elements-list').html(tmpl('elements_no_data', {}));	
      }
       
      this.pageMode();
      
+     var self = this;
+     $('.element-row-selector').bind('click',
+               function() {                   
+                 var index = new Number($(this).attr('rel'));
+                 self.model.setEntityIndex(index);
+                 self.editEntity();
+               });   
+
      // Process the Hooks
      for (var idx=0; idx < this.model.entityHooks.length; idx++) {        	
        if (this.model.entityHooks[idx].onRenderEntities) {
@@ -482,10 +448,8 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
     };
       
     this.newEntity = function() { /* Prepares for create a new entity */
-    
-      var elementFormContainer = document.getElementById('element-form-detail');
      
-      $(elementFormContainer).html( this.templates.tmpl_element_form({'entity':null,'self':this}));
+      $("#element-form-detail").html(tmpl('element_template_form', {'entity':null,'self':this}));
       
       this.formElementMode('new');
 
@@ -502,9 +466,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
     
       var entity = this.model.currentEntity();
      
-      var elementFormContainer = document.getElementById('element-form-detail');
-     
-      $(elementFormContainer).html( this.templates.tmpl_element_form({'entity':entity,'self':this}) );
+      $("#element-form-detail").html(tmpl('element_template_form', {'entity':entity,'self':this}) );
       
       this.formElementMode('edit');
 
@@ -555,8 +517,8 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
     /* ----------- Update entity ----------------------- */
 
     this.updateEntityRow = function(entity, element_index) {
-        
-      var elementHtml = this.templates.tmpl_element_in_the_list( {'entity':entity,'index':element_index, 'self':this} );
+
+      var elementHtml = tmpl('elements_list_template', {'entity':entity,'index':element_index, 'self':this} );
     
       var elementId = '#element_row_' + element_index;
       $(elementId).replaceWith(elementHtml);    
@@ -583,10 +545,10 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
 
     this.buildEntitiesTitle = function() { /* Renders the title */
 
-      if (this.templates.tmpl_elements_title) {
+      if (document.getElementById('elements_title')) {
 
          var titleContainer = $('.elements-title');
-         var titleHtml = this.templates.tmpl_elements_title;
+         var titleHtml = tmpl('elements_title');
          $(titleContainer).html(titleHtml);
 
       }
@@ -595,10 +557,10 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
 
     this.buildEntitiesSearch = function() { /* Renders the search */
 
-      if (this.templates.tmpl_elements_search) {
+      if (document.getElementById('elements_search')) {
 
          var searchContainer = $('.elements-search');
-         var searchHtml = this.templates.tmpl_elements_search;
+         var searchHtml = tmpl('elements_search');
          $(searchContainer).html(searchHtml);
 
          // Process the Hooks
@@ -615,10 +577,10 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
 
     this.buildEntitiesDescription = function() { /* Renders the description */
   
-      if (this.templates.tmpl_element_description) {
+      if (document.getElementById('elements_description')) {
   
         var descriptionContainer = $('.elements-description')[0];
-        var descriptionHtml = this.templates.tmpl_element_description;
+        var descriptionHtml = tmpl('elements_description');
         $(descriptionContainer).html(descriptionHtml);	
   	
       }
@@ -628,7 +590,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
     this.buildEntitiesList = function(entities) { /* Renders the entities list */
         // Render the structure
       var elementContainer = $('.elements-list')[0];
-      var listStructureHtml = this.templates.tmpl_element_list({});
+      var listStructureHtml = tmpl('elements_container_template', {});
       $(elementContainer).html(listStructureHtml);
      
       // Render the elements
@@ -652,7 +614,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
        var elementHtml = '';
             
        for (var element_index in entities) {      	
-         elementHtml += this.templates.tmpl_element_in_the_list( {'entity':entities[element_index],'index':element_index, 'self':this});      	
+         elementHtml += tmpl('elements_list_template', {'entity':entities[element_index],'index':element_index, 'self':this});      	
        }
   	
   	   return elementHtml;
