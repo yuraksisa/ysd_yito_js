@@ -188,7 +188,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
           $('#tabs_above ul').hide();
           $('#tabs_above .ui-tabs-panel').css('width', 'auto');
           $('#tabs_above .ui-tabs-panel').css('float', 'none');
-          $('#tabs_above .ui-tabs-panel').css('padding', '0px 10px');
+          $('#tabs_above .ui-tabs-panel').css('padding', '0');
           $('#tabs_above .ui-tabs-panel').css('border', 'none');
         }
 

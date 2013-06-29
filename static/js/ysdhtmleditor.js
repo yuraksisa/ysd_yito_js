@@ -6,7 +6,9 @@ define(['jquery','jquery.wysiwyg'], function($) {
   	   autoSave: true,
        removeHeadings: true,
        initialContent: '',
-       css: '/assets/css/wysiwyg/editor.css',
+       iFrameClass: 'html_editor',
+       css: '/css/style.css',
+       replaceDivWithP: false,
        controls:{
          h1: {visible: false},
          html: {visible: true}  // Show a control to 
