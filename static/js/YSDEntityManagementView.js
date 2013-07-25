@@ -302,7 +302,8 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
            break;
 
         case 'action_executed':
-           this.update_status('<div class="entity-message entity-message-ok">action executed successfully</div>');        
+           this.update_status('<div class="entity-message entity-message-ok">action executed successfully</div>');
+           this.updateCurrentEntity();        
            break;
 
         case 'action_executed_error':
@@ -365,6 +366,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
             if (!this.model.configuration.hold_form_after_action) {
               if (destination = this.model.configuration.search_params['destination']) {
           	    this.redirect_destination_or_base();
+                break;
               }
             }
           }
@@ -373,8 +375,10 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
               if (!this.model.configuration.hold_form_after_action) {
                 this.updateEntityRow(this.model.currentEntity(), this.model.getEntityIndex());
                 this.pageMode();
+                break;
               }              	
             }
+          this.updateCurrentEntity();  
       	  break;
       	  
        case 'error_creating_entity': /* error creating entity */
@@ -515,6 +519,25 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
     }
     
     /* ----------- Update entity ----------------------- */
+
+    this.updateCurrentEntity = function() {
+
+      var entity = this.model.currentEntity();
+     
+      $("#element-form-detail").html(tmpl('element_template_form', {'entity':entity,'self':this}) );
+      
+      this.formElementMode('edit');
+
+      // Process the Hooks
+      for (var idx=0; idx < this.model.entityHooks.length; idx++) {         
+        if (this.model.entityHooks[idx].onEdit) {
+          this.model.entityHooks[idx].onEdit(entity); 
+        }           
+      }    
+
+      this.updateEntityRow(entity, this.model.getEntityIndex());
+
+    }
 
     this.updateEntityRow = function(entity, element_index) {
 
@@ -752,7 +775,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
   	
   	    var response = false;
   	
-        $("<div title='" + title + "'>" + message + "</div>").dialog( { height: 160, modal: true,     	 
+        $("<div title='" + title + "'>" + message + "</div>").dialog( { height: 250, modal: true,     	 
        	        buttons: {
        	          Ok: function() {
 				     response = true;

@@ -44,7 +44,7 @@ define(['YSDEventTarget', 'YSDGui', 'YSDForms', 'ysdtemplate', 'jquery', 'YSDPag
   	   }	
   		
   	   var self = this;
-  		 var url = '/comments/' + this.comment_set_id + '/page/' + this.currentPage;
+  		 var url = '/api/comments/' + this.comment_set_id + '/page/' + this.currentPage;
   		
   	   $.ajax({
   	   	       type: 'GET',
@@ -89,7 +89,7 @@ define(['YSDEventTarget', 'YSDGui', 'YSDForms', 'ysdtemplate', 'jquery', 'YSDPag
   		
   		$.ajax( {
   			type   : 'POST',
-  			url    : '/comment',  			
+  			url    : '/api/comment',  			
   			data   : json_request,
  		    data_type : 'json',
   			success : function(data, textStatus, jqXHR) {

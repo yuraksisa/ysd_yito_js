@@ -1,4 +1,8 @@
-define(['YSDArrayDataModel', 'YSDEntityManagementModel', 'YSDEntityManagementController', 'YSDEntityManagementView'], function(ArrayDataModel, EntityModel, EntityController, EntityView) {
+define(['YSDArrayDataModel', 
+        'YSDEntityManagementModel', 
+        'YSDEntityManagementController', 
+        'YSDEntityManagementView'], 
+        function(ArrayDataModel, EntityModel, EntityController, EntityView) {
 	
   /* ------------------------------------------------------------------
      EntityManagement
