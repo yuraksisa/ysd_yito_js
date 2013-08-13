@@ -591,7 +591,9 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
            if (this.model.entityHooks[idx].onRenderSearch) {
              this.model.entityHooks[idx].onRenderSearch();  
            }            
-         }             
+         }
+
+         searchContainer.show();             
 
       }
 

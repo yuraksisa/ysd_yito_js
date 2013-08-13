@@ -34,11 +34,11 @@ module Huasi
     # @return [Array]
     #   An array which contains the css resources used by the module
     #
-    def page_style(context={})
-      [
-        '/assets/css/style.css'         
-      ]       
-    end
+    #def page_style(context={})
+    #  [
+    #    '/assets/css/style.css'         
+    #  ]       
+    #end
  
     #
     # It gets the scripts used by the module

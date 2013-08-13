@@ -34,6 +34,7 @@ define(function() {
     this.createNullOption = function() {
       var selectControl = document.getElementById(selectControlId);
       var  option = document.createElement('option');
+      option.setAttribute('value', '');
       option.text = option.innerText = this.nullOptionText;
       selectControl.appendChild(option);    
     }
