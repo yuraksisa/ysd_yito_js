@@ -25,7 +25,7 @@ define(['jquery', 'ysdtemplate'], function($, tmpl){
  	    this.appendAction = document.createElement('img');
  	    this.appendAction.setAttribute('class', 'list-management-add-action');
  	    this.appendAction.setAttribute('src', '/img/new.png');
-        this.actions.appendChild(this.appendAction);
+      this.actions.appendChild(this.appendAction);
        	
  	    var holder = document.getElementById(placementId);
  	    holder.appendChild(this.container);

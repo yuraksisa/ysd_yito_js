@@ -38,20 +38,20 @@ define(function(){
  
    this.deleteElement = function(id) { /* Deletes the element */
  	
- 	 var elementToDelete = null;
+ 	   var elementToDelete = null;
  	
- 	 for (var idx=0; idx < this.data.length; i++) {
- 	   if (this.data[idx].id = id) {
- 	     elementToDelete = idx;
- 	     break;	
- 	   } 	
- 	 }
+ 	   for (var idx=0; idx < this.data.length; idx++) {
+ 	     if (this.data[idx].id == id) {
+ 	       elementToDelete = idx;
+ 	       break;	
+ 	     } 	
+ 	   }
  	
- 	 if (elementToDelete >= 0) {
- 	   this.data.splice(elementToDelete,1);
- 	 }
+ 	   if (elementToDelete >= 0) {
+ 	     this.data.splice(elementToDelete,1);
+ 	   }
  	 	
- 	 this.view.notify('data_changed');
+ 	   this.view.notify('data_changed');
  	
    }
 		

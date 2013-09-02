@@ -32,6 +32,10 @@ define(['YSDListManagementModel', 'YSDListManagementController', 'YSDListManagem
     this.addElement = function(element) { /* Adds a new element */
       this.model.addElement(element);	
     }
+
+    this.deleteElement = function(id) { /* Removes an element */
+      this.model.deleteElement(id);
+    }
   
     this.addListener = function(type, listener) { /* Adds a listener */
   	  this.controller.addListener(type, listener);

@@ -20,7 +20,7 @@ define (['YSDEventTarget'], function(YSDEventTarget) {
     }	
  
     this.deleteElementButtonClick = function(id) {
-      this.model.deleteElement(id);
+      this.events.fireEvent({type: 'delete_element_button_click', data: id})
     }
  
     this.addElementButtonClick = function() {
