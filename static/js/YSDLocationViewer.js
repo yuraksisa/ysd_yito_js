@@ -69,7 +69,12 @@ define(['YSDEventTarget','async!https://maps.google.com/maps/api/js?sensor=false
      
       var self = this; 
       
-      this.geocoder.geocode( { 
+      if (location.latlng) {
+        this.locations.push(location);
+        this.events.fireEvent({type:'set_center', location: location});
+      }
+      else {
+        this.geocoder.geocode( { 
   	                           address : location.address,
                                region  : this.region,
                              },
@@ -78,7 +83,7 @@ define(['YSDEventTarget','async!https://maps.google.com/maps/api/js?sensor=false
                               self.locations.push(location);                            
                               self.events.fireEvent({type:'set_center', location: location});   	
                             }); 	
-    
+      }
     	
     }
       
@@ -90,7 +95,13 @@ define(['YSDEventTarget','async!https://maps.google.com/maps/api/js?sensor=false
      
       var self = this; 
       
-      this.geocoder.geocode( { 
+      
+      if (location.latlng) {
+        self.locations.push(location); 
+        this.events.fireEvent({type:'add_location', location: location});
+      }
+      else {
+        this.geocoder.geocode( { 
   	                           address : location.address,
                                region  : this.region,
                              },
@@ -99,7 +110,7 @@ define(['YSDEventTarget','async!https://maps.google.com/maps/api/js?sensor=false
                                self.locations.push(location);                            
                                self.events.fireEvent({type:'add_location', location: location});   	
                              }); 	
-  	 	
+  	 	}
     }
  	
   }

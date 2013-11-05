@@ -14,6 +14,8 @@ requirejs.config({
 		"jquery.cookie"           : "jquery.cookie",
 		"jquery.nivo.slider"      : "jquery.nivo.slider.pack", 
 		"jquery.placeholder"      : "jquery.placeholder",
+		"jquery.superscrollorama" : "jquery.superscrollorama",
+		"jquery.lettering"        : "jquery.lettering.min",
 		"json2"                   : "json2",
 		"datejs"                 : "date-es-ES"
 	},
@@ -31,11 +33,15 @@ requirejs.config({
       "jquery.wysiwyg" : ['jquery'],
       "jquery.nivo.slider": ['jquery'],
       "jquery.placeholder": ['jquery'],
+      "jquery.superscrollorama" : ['jquery'],
+      "jquery.lettering": ['jquery'],
       "json2" : { 
         "exports": 'JSON'
       },
       "datejs" : {},
       "underscore" : {},   // Underscore.js library (functions for old browsers)
+      "TimelineMax.min": {}, // greensock
+      "TweenMax.min" : {}, // greensock
       "time" : ['datejs']
       
 	}
