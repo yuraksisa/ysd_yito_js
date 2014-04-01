@@ -15,7 +15,9 @@ requirejs.config({
 		"jquery.nivo.slider"      : "jquery.nivo.slider.pack", 
 		"jquery.placeholder"      : "jquery.placeholder",
 		"jquery.superscrollorama" : "jquery.superscrollorama",
-		"jquery.lettering"        : "jquery.lettering.min",
+		"jquery.lettering"        : "jquery.lettering",
+		"bootstrap"               : "bootstrap",
+		"jquery.bsAlerts"         : "jquery.bsAlerts",
 		"json2"                   : "json2",
 		"datejs"                 : "date-es-ES"
 	},
@@ -35,6 +37,8 @@ requirejs.config({
       "jquery.placeholder": ['jquery'],
       "jquery.superscrollorama" : ['jquery'],
       "jquery.lettering": ['jquery'],
+      "bootstrap" : {},
+      "jquery.bsAlerts": ['jquery','bootstrap'],
       "json2" : { 
         "exports": 'JSON'
       },

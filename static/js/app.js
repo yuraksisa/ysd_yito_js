@@ -18,6 +18,8 @@ requirejs(['jquery',
            'jquery.placeholder',
            'jquery.superscrollorama',
            'jquery.lettering',
+           'jquery.bsAlerts',
+           'bootstrap',
            'json2', 
            'datejs',
            'time',
@@ -52,7 +54,8 @@ requirejs(['jquery',
            'YSDPagerSimpleView',
            'YSDPagerPListController',
            'YSDPagerPListView',
-           'YSDPagerFactory'
+           'YSDPagerFactory',
+           'YSDFileUploader',                // File Uploader
         ],
         function() {
           // none	

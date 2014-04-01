@@ -2,7 +2,9 @@
      - jqueryui  (dialog)
 */
 
-define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], function(tmpl, $, htmlEditor){
+define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmleditor', 
+        'jquery.ui', 'datejs', 'bootstrap', 'jquery.bsAlerts'], function(tmpl, YSDStyles, YSDGui, YsdForms, $, 
+        htmlEditor){
 	
   /* ------------------------------------------------------------------
      EntityView
@@ -353,7 +355,12 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
           else
             if (this.model.configuration.action == 'list') {
               this.model.forceReload = true;
-              this.newEntity();
+              if (this.model.configuration.hold_form_after_action) {
+                this.editEntity();
+              }
+              else {
+                this.newEntity();
+              }
             }
           
           break; 
@@ -439,7 +446,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
                function() {                   
                  var index = new Number($(this).attr('rel'));
                  self.model.setEntityIndex(index);
-                 self.editEntity();
+                 //self.editEntity();
                });   
 
      // Process the Hooks
@@ -681,28 +688,41 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
     };
 
     this.formElementMode = function(action) { /* Form Element Mode (edit/create new entity) */	
-       $('.elements-container').hide();
-       $('.element-container').hide();    
-       $('.element-form-container').show();
-      
-       if (action == 'new') {
-         $('.element_actions').hide();
-       } 
-       else {
-         $('.element_actions').show();
+       
+       var inline = (action == 'new' && this.model.configuration.newInline) ||
+                    (action == 'edit' && this.model.configuration.editInline);
+
+       if (inline) {
+         $('.element-form-container .top-navigation-bar').hide();
+         var self = this;
+         YSDGui.showElement($('.element-form-container')[0], true, function() {
+           self.cancelEntity();
+         });
        }
-       $('.elements_actions').hide();
+       else {
+         $('.elements-container').hide();
+         $('.elements_actions').hide();
+         $('.element-container').hide();    
+         $('.element-form-container').show();
+         if (this.model.configuration.action != 'list') {
+           this.configureBackLink();
+         }        
+         if (action == 'new') {
+           $('.element_actions').hide();
+         } 
+         else {
+           $('.element_actions').show();
+         }
+         this.navigationBar('.element-form-container');
+       }
       
        this.configureFormEvents();
        this.configureElementEvents();
-       this.navigationBar('.element-form-container');
-
-       if (this.model.configuration.action != 'list') {
-         this.configureBackLink();
-       }
-
-       this.configureTabs(); // Configure the tabs
-       htmlEditor('.texteditor'); // Converts the editor into HTML editors
+       
+       // Configure the form elements
+       this.configureTabs();      // Tabs
+       htmlEditor('.texteditor'); // HTML editor
+       $('.alert-box').bsAlerts();
     };
 
     this.isPageMode = function() {
@@ -762,6 +782,7 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
     
   	this.notify_user = function(title, message) { /* Notifies a POPUP message to the user */
   		
+      /*
         $("<div title='" + title + "'>" + message + "</div>").dialog( { height: 250, modal: true,     	 
        	        buttons: {
        	            Ok: function() 
@@ -770,7 +791,10 @@ define(['ysdtemplate', 'jquery', 'ysdhtmleditor', 'jquery.ui', 'datejs'], functi
 				    }
 				}
            	  });   	 	
-  		
+  		*/
+
+      YsdForms.showAlert(message, 'error');
+
   	}    
   	
   	this.ask_for_confirmation = function(title, message, callback) { /* Asks for confirmation */

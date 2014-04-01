@@ -1,6 +1,72 @@
-define(['jquery'], function($){
+define(['jquery','ysdhtmleditor', 'jquery.placeholder', 'jquery.formparams', 
+        'jquery.ui', 'bootstrap', 'jquery.bsAlerts'], function($, htmlEditor){
 
   var YsdForms = {};
+
+  YsdForms.improve = function() {
+
+    // activate place holders
+    $($('form').find('input[placeholder],textarea[placeholder]')).placeholder();
+
+    // converts into html editor
+    htmlEditor('.texteditor');
+
+    // Ajax Submit
+    $('form[data-remote="ajax"]').find('input[type="submit"]').bind('click', 
+      function() {
+         var form = $(this.form)[0];
+         YsdForms.submitAjax(form);
+         return false;
+    });
+ 
+    // Ajax autosubmit
+    $('[data-autosubmit="true"]').bind('change', function() {
+        var form = this.form;
+        YsdForms.submitAjax(form);
+    });
+
+  };
+
+  YsdForms.submitAjax = function(form) {
+
+    var data = encodeURIComponent(JSON.stringify($(form).formParams(true)));
+    var method = $(form).attr('data-remote-method') || form.method;
+    
+    $.ajax({
+            url  : form.action,
+            data : data,    
+            type : method,
+            data_type : 'json',
+            content_type : 'json',
+            success : function(data, textStatus, jqXHR) {
+              YsdForms.showAlert('done', 'success');
+            },
+            error : function(data, textStatus, jqXHR) {
+              YsdForms.showAlert(textStatus, 'error');
+            }
+    });
+
+  }
+
+  YsdForms.showAlert = function(message, priority) {
+    $(document).trigger("add-alerts", {
+       message: message,
+       priority: priority
+    });
+  }
+
+  YsdForms.showModalDialogNotification = function(title, message) {
+
+    $("<div title='" + title + "'>" + message + "</div>").dialog( 
+       { height: 250, modal: true,        
+         buttons: {
+            Ok: function() {
+              $( this ).dialog( "close" );
+            }
+        }
+    });       
+
+  }
 
   /*
    * Limit the text area content size

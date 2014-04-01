@@ -63,7 +63,7 @@ define(['YSDArrayDataModel',
        E. Create an instance of the EntityManagement
                       
          urls = {query_url  : '/my-entities',
-    	         create_url : '/my-entity',
+    	           create_url : '/my-entity',
   	             update_url : '/my-entity',
   	             delete_url : '/my-entity',
   	             get_url    : '/my-entity'};
@@ -106,6 +106,8 @@ define(['YSDArrayDataModel',
        
          hold_form_after_action : When the user updates/creates and entity, it holds the form (in edit/new action) 
          parent_filtered        : The entities are filtered by its parent
+         new_inline             : The new entity form is shown in front of the entities list holding the background
+         edit_inline            : The edit entity form is shown in front of the entities list holding the background
          
          Other configuration parameters (if not supplied they will be extract from the URL)
          

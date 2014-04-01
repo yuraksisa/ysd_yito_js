@@ -79,7 +79,7 @@ define(['YSDStyles', 'YSDEvents'], function(YSDStyles, YSDEvents){
   /**
    * Show the element in front of all the other elements
    */
-  YSDGui.showElement = function(element, unlockOnClick) {
+  YSDGui.showElement = function(element, unlockOnClick, callback) {
 
     // Lock the background
     var backDiv = YSDGui.lockBackground( '#000000', unlockOnClick );
@@ -90,7 +90,12 @@ define(['YSDStyles', 'YSDEvents'], function(YSDStyles, YSDEvents){
     {
       YSDEvents.addEvent(backDiv, 
                  'click', 
-                 function() { YSDGui.hideElement(element) } );
+                 function() { 
+                    YSDGui.hideElement(element);
+                    if (callback && typeof callback === 'function') {
+                      callback();
+                    }
+                 } );
     }
  
     // Show the element (centered) 

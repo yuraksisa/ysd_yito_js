@@ -54,9 +54,9 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	this.queryMode = 'page';      /* It represents the query mode : page or entity */
   	
   	this.dataModel = dataModel;   /* It represents the data model */
-  	this.summary = null;     /* Represents the summary data (retrieved) */
-  	this.page = 1;  	     /* It represents the current page */
-  	this.lastError = null;   /* It represents the last error in Ajax request */
+  	this.summary = null;          /* Represents the summary data (retrieved) */
+  	this.page = 1;  	            /* It represents the current page */
+  	this.lastError = null;        /* It represents the last error in Ajax request */
   	
   	this.events = new YSDEventTarget(); /* Manages the model events */
   	
@@ -572,9 +572,9 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
       }
   	  
   	  the_data = encodeURIComponent(JSON.stringify(the_data));
-  	    	  
-  	  if (YSDGui.lockBackground) {
-	    YSDGui.lockBackground("#000000", false);
+  	    	
+  	  if (!this.configuration.newInline) {
+	      YSDGui.lockBackground("#000000", false);
   	  }
   	  
   	  $.ajax( {
@@ -600,7 +600,7 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	              the_model.change_state('entity_created_error');	
   	            },
   	            complete : function(jqXHR, textStatus) {
-  	              if (YSDGui.unLockBackground) {
+  	              if (!the_model.configuration.newInline) {
   	                YSDGui.unLockBackground();	
   	              }	
   	            }
@@ -635,8 +635,8 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	    	    	    	    	  
   	  the_data = encodeURIComponent(JSON.stringify(the_data));
   	  
-  	  if (YSDGui.lockBackground) {
-	    YSDGui.lockBackground("#000000", false);
+  	  if (!this.configuration.editInline) {
+	      YSDGui.lockBackground("#000000", false);
   	  }
   	  
   	  $.ajax( {
@@ -657,7 +657,7 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	              the_model.change_state('entity_updated_error');	
   	            },
   	            complete : function(jqXHR, textStatus) {
-  	              if (YSDGui.unLockBackground) {
+  	              if (!the_model.configuration.editInline) {
   	                YSDGui.unLockBackground();	
   	              }	
   	            }
@@ -860,6 +860,16 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
               }              
 
       });
+
+    };
+
+    this.notifyHooks = function(data) {
+
+      for (var idx=0; idx < this.entityHooks.length; idx++) { // Notify the hooks that the element has been created         
+        if (this.entityHooks[idx].onNotify) {
+          this.entityHooks[idx].onNotify(data); 
+        }           
+      }        
 
     };
   
