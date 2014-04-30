@@ -1,7 +1,5 @@
 requirejs.config({
-	
-	//baseUrl: 'static/js',
-	
+		
 	paths: {
 		"jquery"                  : "jquery-1.8.2", 
 		"jquery.ui"               : "jquery-ui-1.9.0", 
@@ -19,34 +17,39 @@ requirejs.config({
 		"bootstrap"               : "bootstrap",
 		"jquery.bsAlerts"         : "jquery.bsAlerts",
 		"json2"                   : "json2",
-		"datejs"                 : "date-es-ES"
+		"datejs"                  : "date-es-ES"
 	},
 
 	shim: {
-      "jquery.tools" : ['jquery'],
-      "jquery.ui"    : ['jquery'],
-      "jquery.ui.datepicker-es" : ['jquery', 'jquery.ui'],
-      "jquery.ui.timepicker" : ['jquery', 'jquery.ui'],
-      "jquery.fullcalendar" : ['jquery', 'jquery.ui'],
-      "jquery.validate" : ['jquery'],
-      "jquery.formparams" : ['jquery'],
-      "jquery.cookie" : ['jquery'],
-      "jquery.ad-gallery" : ['jquery'],
-      "jquery.wysiwyg" : ['jquery'],
-      "jquery.nivo.slider": ['jquery'],
-      "jquery.placeholder": ['jquery'],
-      "jquery.superscrollorama" : ['jquery'],
-      "jquery.lettering": ['jquery'],
-      "bootstrap" : {},
-      "jquery.bsAlerts": ['jquery','bootstrap'],
-      "json2" : { 
-        "exports": 'JSON'
-      },
-      "datejs" : {},
-      "underscore" : {},   // Underscore.js library (functions for old browsers)
-      "TimelineMax.min": {}, // greensock
-      "TweenMax.min" : {}, // greensock
-      "time" : ['datejs']
+        "jquery.tools" : ['jquery'],
+        "jquery.ui"    : ['jquery'],
+        "jquery.ui.datepicker-es" : ['jquery', 'jquery.ui'],
+        "jquery.ui.timepicker" : ['jquery', 'jquery.ui'],
+        "jquery.fullcalendar" : ['jquery', 'jquery.ui'],
+        "jquery.validate" : ['jquery'],
+        "jquery.formparams" : ['jquery'],
+        "jquery.cookie" : ['jquery'],
+        "jquery.ad-gallery" : ['jquery'],
+        "jquery.wysiwyg" : ['jquery'],
+        "jquery.nivo.slider": ['jquery'],
+        "jquery.placeholder": ['jquery'],
+        "jquery.superscrollorama" : ['jquery'],
+        "jquery.lettering": ['jquery'],
+        "bootstrap" : {},
+        "jquery.bsAlerts": ['jquery','bootstrap'],
+        "json2" : { 
+          "exports": 'JSON'
+        },
+        "datejs" : {},
+        "underscore" : {
+            exports: '_'
+        },     // Underscore.js library (functions for old browsers)
+        "TimelineMax.min": {}, // greensock
+        "TweenMax.min" : {},   // greensock
+        "time" : ['datejs'],
+        "charts" : {
+            exports: 'Chart'
+        }          // charts
       
 	}
 	

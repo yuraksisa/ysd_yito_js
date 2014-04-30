@@ -26,6 +26,8 @@ requirejs(['jquery',
            'underscore',
            'TimelineMax.min',
            'TweenMax.min',
+           'charts',
+           'masonry',
            'YSDDateFormatter',           
            'YSDjson2',
            'YSDEntityManagementComplementHooks', // complement hooks for entity management
@@ -55,6 +57,7 @@ requirejs(['jquery',
            'YSDPagerPListController',
            'YSDPagerPListView',
            'YSDPagerFactory',
+           'YSDSpreadSheet',
            'YSDFileUploader',                // File Uploader
         ],
         function() {
