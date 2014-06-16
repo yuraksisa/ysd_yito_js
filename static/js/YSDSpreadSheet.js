@@ -1,10 +1,10 @@
 define('YSDSpreadSheet', ['jquery'], function($) {
 	
-  SpreadSheet = function (tableId, columnsTitles, rowsTitles, numberOfRows, zerozeroTitle, inputPrefix, inputSize, inputClass) {
+  SpreadSheet = function (tableId, columnsTitles, rowsTitles, numberOfRows, zerozeroTitle, inputPrefix, inputSize, inputClass, readonly) {
 
     this.model = new SpreadSheetModel(columnsTitles, rowsTitles, numberOfRows);
     this.controller = new SpreadSheetController(this.model);
-    this.view = new SpreadSheetView(tableId, this.model, this.controller, zerozeroTitle, inputPrefix, inputSize, inputClass);
+    this.view = new SpreadSheetView(tableId, this.model, this.controller, zerozeroTitle, inputPrefix, inputSize, inputClass, readonly);
 
     this.model.setView(this.view);
     this.controller.setView(this.view);
@@ -37,7 +37,7 @@ define('YSDSpreadSheet', ['jquery'], function($) {
 
   }
 
-  SpreadSheetView = function(tableId, model, controller, zeroZeroTitle, inputPrefix, inputSize, inputClass) {
+  SpreadSheetView = function(tableId, model, controller, zeroZeroTitle, inputPrefix, inputSize, inputClass, readonly) {
 
     this.table = document.querySelector('#'+tableId);
     this.model = model;
@@ -46,6 +46,7 @@ define('YSDSpreadSheet', ['jquery'], function($) {
     this.inputSize = inputSize;
     this.inputClass = inputClass;
     this.zeroZeroTitle = zeroZeroTitle; 
+    this.readonly = readonly;
 
     this.init = function() { /** Builds the Spreadsheet **/
 
@@ -75,7 +76,8 @@ define('YSDSpreadSheet', ['jquery'], function($) {
           cellId += '[' + this.model.rowTitles[j] + ']'; 
           row.insertCell(-1).innerHTML = '<input type="text" id="' + cellId +
             '" name="' + cellId + '" ' + 'class="spread_input ' + this.inputClass + '" ' + 
-            '" size="' + this.inputSize + '"/>';	
+            '" size="' + this.inputSize + '"' + (this.readonly ? ' readonly' : '') + '/>';
+
         }
 
       }
