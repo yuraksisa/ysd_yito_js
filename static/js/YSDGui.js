@@ -1,4 +1,4 @@
-define(['YSDStyles', 'YSDEvents'], function(YSDStyles, YSDEvents){
+define(['YSDStyles', 'YSDEvents', 'jquery'], function(YSDStyles, YSDEvents, $){
 
   var YSDGui = {}
 	
@@ -73,6 +73,10 @@ define(['YSDStyles', 'YSDEvents'], function(YSDStyles, YSDEvents){
 
     YSDStyles.hide(element);	
     YSDGui.unLockBackground();
+    $(element).css('position','');
+    $(element).removeAttr('top','');
+    $(element).removeAttr('left','');
+    $(element).removeAttr('z-index','');
 	
   }
 

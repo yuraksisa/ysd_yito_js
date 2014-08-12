@@ -1,12 +1,13 @@
 define(['jquery', 'ysdtemplate'], function($, tmpl){ 
 	
-  YSDListManagementView = function(model, controller, placementId, controlName, addElementTitle) { /****** The view *********/
+  YSDListManagementView = function(model, controller, placementId, controlName, addElementTitle, itemClass) { /****** The view *********/
    
     this.model = model;
     this.controller = controller;	
     this.placementId = placementId;
     this.controlName = controlName;
     this.addElementTitle = addElementTitle;
+    this.itemClass = itemClass;
  
     this.controller.setView(this);
     this.model.setView(this);
@@ -21,7 +22,7 @@ define(['jquery', 'ysdtemplate'], function($, tmpl){
  	
  	    this.actions = document.createElement('div');
  	    this.actions.setAttribute('id',controlName+'Actions');
- 	    this.actions.setAttribute('class','list-management-container-actions');
+ 	    this.actions.setAttribute('class','list-management-container-actions clear-float');
  	
       var text = document.createTextNode(this.addElementTitle);
  	    this.appendAction = document.createElement('span');
@@ -73,14 +74,14 @@ define(['jquery', 'ysdtemplate'], function($, tmpl){
  
     this.createRow = function(element) { /* Create an element */
  
-      var script = "<div class=\"list-management-item\" rel=\"<%=element.id%>\">"+
+      var script = "<div class=\"list-management-item <%=item_class%>\" rel=\"<%=element.id%>\">"+
                    " <span class=\"list-management-item-description\"><span><%=element.description%></span></span>" +
                    " <span class=\"list-management-item-delete\"><span class=\"list-management-item-delete-img smaller_text\" rel=\"<%=element.id%>\" data-icon=\"&#xe01a\"/></span>" +
                    "</div>";
                 
       var template = tmpl(script);
    
-      $(this.container).append(template({element:element}));
+      $(this.container).append(template({element:element, item_class:this.itemClass}));
    
       var controller = this.controller;
    

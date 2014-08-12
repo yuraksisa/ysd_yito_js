@@ -335,7 +335,7 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
       	  break;
         
         case 'entity_created': /* entity created  */
-          
+          this.check_hide_inline('new');
           this.update_status('<div class="entity-message entity-message-ok">'+ this.model.entity + ' created successfully</div>');
           
           if (this.model.configuration.action == 'new') {
@@ -366,7 +366,7 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
           break; 
           
        case 'entity_updated': /* entity updated */
-          
+          this.check_hide_inline('edit');
           this.update_status('<div class="entity-message entity-message-ok">'+ this.model.entity + ' updated successfully</div>');
           
           if (this.model.configuration.action == 'edit') {
@@ -389,13 +389,13 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
       	  break;
       	  
        case 'error_creating_entity': /* error creating entity */
-          
+          this.check_hide_inline('new');
           this.update_status('<div class="entity-message entity-message-error">Error creating '+ this.model.entity + '</div>');         
           this.notify_user('Error creating entity' , 'Server error creating entity');
           break;  
 
        case 'error_updating_entity': /* error updating entity */
-          
+          this.check_hide_inline('edit');
           this.update_status('<div class="entity-message entity-message-error">Error updating '+ this.model.entity + '</div>');
           this.notify_user('Error updating entity' , 'Server error updating entity');
           break;       	  
@@ -422,6 +422,18 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
     	
     };
     
+    this.check_hide_inline = function(action) {
+
+       var inline = (action == 'new' && this.model.configuration.newInline) ||
+                    (action == 'edit' && this.model.configuration.editInline);
+
+       if (inline) {
+         YSDGui.hideElement($('.element-form-container')[0]);
+         $('.element-form-container .top-navigation-bar').hide();
+       }
+       
+    };
+
     /* -------------- Basic GUI -------------------------------------- */
     
     this.renderEntities = function() { /* Renders all the loaded entities */

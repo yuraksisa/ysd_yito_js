@@ -16,11 +16,11 @@ define(['YSDListManagementModel', 'YSDListManagementController', 'YSDListManagem
    @param value
      The original value
   ------------------------------------------------- */
-  YSDListManagement = function(placementId, controlName, dataSource, addElementTitle) {
+  YSDListManagement = function(placementId, controlName, dataSource, addElementTitle, itemClass) {
 
     this.model = new YSDListManagementModel(dataSource);
     this.controller = new YSDListManagementController(this.model);
-    this.view = new YSDListManagementView(this.model, this.controller, placementId, controlName, addElementTitle || 'upload');
+    this.view = new YSDListManagementView(this.model, this.controller, placementId, controlName, addElementTitle || 'upload', itemClass);
   
     this.view.createGui();
     this.model.retrieveData();
