@@ -429,7 +429,7 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
 
        if (inline) {
          YSDGui.hideElement($('.element-form-container')[0]);
-         $('.element-form-container .top-navigation-bar').hide();
+         $('.element-form-container .top-navigation-bar').show();
        }
        
     };
