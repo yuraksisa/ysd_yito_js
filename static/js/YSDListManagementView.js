@@ -75,9 +75,11 @@ define(['jquery', 'ysdtemplate'], function($, tmpl){
     this.createRow = function(element) { /* Create an element */
  
       var script = "<div class=\"list-management-item <%=item_class%>\" rel=\"<%=element.id%>\">"+
-                   " <span class=\"list-management-item-description\"><span><%=element.description%></span></span>" +
-                   " <span class=\"list-management-item-delete\"><span class=\"list-management-item-delete-img smaller_text\" rel=\"<%=element.id%>\" data-icon=\"&#xe01a\"/></span>" +
-                   "</div>";
+                   " <span class=\"list-management-item-description\"><span><%=element.description%></span></span>";
+      if (!element.hideDelete) {
+        script += " <span class=\"list-management-item-delete\"><span class=\"list-management-item-delete-img smaller_text\" rel=\"<%=element.id%>\" data-icon=\"&#xe01a\"/></span>";
+      }
+      script +=    "</div>";
                 
       var template = tmpl(script);
    

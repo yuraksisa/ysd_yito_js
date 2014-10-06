@@ -8,7 +8,8 @@ define(['YSDEventTarget'], function(EventTarget) {
 
     this.events = new EventTarget();  
     this.state = 'initial';
-    this.file = null;
+    this.fileName = null;
+    this.data = null;
 
     this.addListener = function(type, listener) { /* addListener */
       this.events.addEventListener(type, listener); 
@@ -22,21 +23,23 @@ define(['YSDEventTarget'], function(EventTarget) {
       this.view = view; 
     }
     
-    this.changeState = function(action) { /* change state */
+    this.changeState = function(action, extraData) { /* change state */
       
       switch (action) {
       
         case 'send_request':
-          this.state = 'uploading_file'
+          this.state = 'uploading_file';
+          this.events.fireEvent({type:'start_upload', data: {fileName: this.fileName}});
           break;
                 
         case 'file_uploaded_ok':
           this.state = 'file_uploaded';
-          this.events.fireEvent({type:'file_uploaded', data: {file: this.file}});
+          this.events.fireEvent({type:'file_uploaded', data: {file: this.data, fileName: this.fileName}});
           break;
           
         case 'file_uploaded_error':
           this.state = 'error_uploading_file';
+          this.events.fireEvent({type:'file_uploaded_error', data: {fileName: this.fileName, extraData: extraData}});
           break;
       }
       
@@ -48,7 +51,7 @@ define(['YSDEventTarget'], function(EventTarget) {
       
       this.changeState('send_request');
       document.forms[this.formName].submit(); // Submits the form to upload the file
-    
+
     }
     
   };

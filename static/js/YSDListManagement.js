@@ -33,6 +33,10 @@ define(['YSDListManagementModel', 'YSDListManagementController', 'YSDListManagem
       this.model.addElement(element);	
     }
 
+    this.updateElement = function(element) { /* Updates the existing element */
+      this.model.updateElement(element);
+    }
+
     this.deleteElement = function(id) { /* Removes an element */
       this.model.deleteElement(id);
     }

@@ -36,6 +36,18 @@ define(function(){
  
    }
  
+   this.updateElement = function(element) { /* Updates the element*/ 
+     
+     for (var idx=0; idx < this.data.length; idx++) {
+       if (element.id && this.data[idx].id == element.id) {
+         this.data[idx] = element;
+         this.view.notify('data_changed');
+         break; 
+       }
+     }
+
+   }
+
    this.deleteElement = function(id) { /* Deletes the element */
  	
  	   var elementToDelete = null;

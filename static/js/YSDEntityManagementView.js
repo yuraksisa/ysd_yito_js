@@ -616,6 +616,24 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
 
       }
 
+      if (document.getElementById('advanced_search')) {
+
+         var advancedSearchContainer = $('.advanced-search-container');
+         var advancedSearch = $('.advanced-search');
+         var advancedSearchHtml = tmpl('advanced_search');
+         $(advancedSearch).html(advancedSearchHtml);
+
+         // Process the Hooks
+         for (var idx=0; idx < this.model.entityHooks.length; idx++) {          
+           if (this.model.entityHooks[idx].onRenderAdvancedSearch) {
+             this.model.entityHooks[idx].onRenderAdvancedSearch();  
+           }            
+         }
+
+         advancedSearchContainer.show();        
+
+      }
+
 
     }
 
