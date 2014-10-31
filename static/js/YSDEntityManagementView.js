@@ -886,6 +886,14 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
     	
     	
     }
+
+    this.formatPadNumber = function(num, length) {
+      var r = "" + num;
+      while (r.length < length) {
+        r = "0" + r;
+      }
+      return r;
+    }
   
   };
 
