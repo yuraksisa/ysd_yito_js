@@ -610,19 +610,21 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	};
   		
   	
-  	this.update = function(updateUrl, callback) { /* Updates an existing instance */
+  	this.update = function(updateUrl, callback, button) { /* Updates an existing instance */
   	  
   	  this.change_state('entity_update');
   	  
   	  var the_model = this;
   	  var the_url = updateUrl || this.urls.update_url;
   	  
-  	  if (!$($('.update-entity-button')[0].form).valid()) {
+      var the_button = button || $('.update-entity-button')[0];
+
+  	  if (!$(the_button.form).valid()) {
   	  	this.entityView.notify_user('Validation errors', 'Check the form. There are errors');
   	    return;	
   	  }  	  
   	  
-  	  var the_data = $($('.update-entity-button')[0].form).formParams(true);
+  	  var the_data = $(the_button.form).formParams(true);
 
   	  // Pre-process the data before be sent to the backend (Hooks)	  
       for (var idx=0; idx < this.entityHooks.length; idx++) {        	

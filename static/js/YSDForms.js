@@ -25,6 +25,12 @@ define(['jquery','ysdhtmleditor', 'jquery.placeholder', 'jquery.formparams',
         YsdForms.submitAjax(form);
     });
 
+    $('.render-to-edit').bind('click', function() {
+        var rel = $(this).attr('rel');
+        $('.edit[rel="'+rel+'"]').show();
+        $('.render[rel="'+rel+'"]').hide();
+    });
+
   };
 
   YsdForms.submitAjax = function(form) {

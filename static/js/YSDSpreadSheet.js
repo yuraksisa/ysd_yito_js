@@ -1,8 +1,8 @@
 define('YSDSpreadSheet', ['jquery'], function($) {
 	
-  SpreadSheet = function (tableId, columnsTitles, rowsTitles, numberOfRows, zerozeroTitle, inputPrefix, inputSize, inputClass, readonly) {
+  SpreadSheet = function (tableId, columnsIds, rowsIds, numberOfRows, zerozeroTitle, inputPrefix, inputSize, inputClass, readonly, columnTitles, rowTitles) {
 
-    this.model = new SpreadSheetModel(columnsTitles, rowsTitles, numberOfRows);
+    this.model = new SpreadSheetModel(columnsIds, rowsIds, numberOfRows, columnTitles, rowTitles);
     this.controller = new SpreadSheetController(this.model);
     this.view = new SpreadSheetView(tableId, this.model, this.controller, zerozeroTitle, inputPrefix, inputSize, inputClass, readonly);
 
@@ -11,14 +11,16 @@ define('YSDSpreadSheet', ['jquery'], function($) {
 
   }
 
-  SpreadSheetModel = function(columnTitles, rowTitles, numberOfRows) {
+  SpreadSheetModel = function(columnIds, rowIds, numberOfRows, columnTitles, rowTitles) {
 
-    this.columnTitles = columnTitles;
-    this.rowTitles = rowTitles;
+    this.columnIds = columnIds;
+    this.rowIds = rowIds;
+    this.columnTitles = columnTitles || columnIds;
+    this.rowTitles = rowTitles || rowIds;
     this.view = null;
     this.numberOfRows = numberOfRows;
-    this.columns = rowTitles.length;
-    this.fixedColumn = columnTitles.length > 0; 
+    this.columns = rowIds.length;
+    this.fixedColumn = columnIds.length > 0; 
 
     this.setView = function(theView) {
       this.view = theView;
@@ -59,7 +61,7 @@ define('YSDSpreadSheet', ['jquery'], function($) {
       if (this.model.fixedColumn) {
       	row.insertCell(-1).innerHTML = '<span class="rowTitle">' + this.zeroZeroTitle + '</span>';
       }
-      for (i=0;i<this.model.rowTitles.length;i++) {
+      for (i=0;i<this.model.rowIds.length;i++) {
         row.insertCell(-1).innerHTML = '<span class="rowTitle">'+ this.model.rowTitles[i]+'</span>';
       } 
 
@@ -70,10 +72,10 @@ define('YSDSpreadSheet', ['jquery'], function($) {
         if (this.model.fixedColumn) {
       	  row.insertCell(-1).innerHTML = '<span class="columnTitle">' + this.model.columnTitles[i] + '</span>'
         }
-        for (j=0;j<this.model.rowTitles.length;j++) {
+        for (j=0;j<this.model.rowIds.length;j++) {
           var cellId = '[' + this.inputPrefix + ']';
-          cellId += this.model.fixedColumn ? '[' + this.model.columnTitles[i] + ']' : '[' + i +']';
-          cellId += '[' + this.model.rowTitles[j] + ']'; 
+          cellId += this.model.fixedColumn ? '[' + this.model.columnIds[i] + ']' : '[' + i +']';
+          cellId += '[' + this.model.rowIds[j] + ']'; 
           row.insertCell(-1).innerHTML = '<input type="text" id="' + cellId +
             '" name="' + cellId + '" ' + 'class="spread_input ' + this.inputClass + '" ' + 
             '" size="' + this.inputSize + '"' + (this.readonly ? ' readonly' : '') + '/>';

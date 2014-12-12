@@ -56,7 +56,7 @@ define(function(){
   	
   	this.updateEntityButtonClick = function(target) { /* Update button click */
       var updateUrl = $(target).attr('data-update-url');
-  	  this.model.update(updateUrl);
+  	  this.model.update(updateUrl, null, target);
   	};
   	
   	this.cancelEntityButtonClick = function() { /* Cancel creation/update process click */
