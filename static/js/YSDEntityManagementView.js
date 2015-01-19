@@ -567,7 +567,7 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
 
       // Reactivate the navigation detail
       var controller = this.controller;
-      var navigationDetail = elementId + '.element-navigation-detail, ' + elementId + '.element-navigation-detail';
+      var navigationDetail = elementId + '.element-navigation-detail, ' + elementId + ' .element-navigation-detail';
       $(navigationDetail).bind('click',
                function() {    
                   controller.showEntityDetail(new Number($(this).attr('rel')));               
