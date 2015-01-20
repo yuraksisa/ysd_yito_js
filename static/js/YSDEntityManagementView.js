@@ -2,9 +2,9 @@
      - jqueryui  (dialog)
 */
 
-define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmleditor', 
+define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmleditor', 'YSDFormatter',
         'jquery.ui', 'datejs', 'bootstrap', 'jquery.bsAlerts'], function(tmpl, YSDStyles, YSDGui, YsdForms, $, 
-        htmlEditor){
+        htmlEditor, ysdFormatter){
 	
   /* ------------------------------------------------------------------
      EntityView
@@ -864,35 +864,20 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
   	
   	this.formatDate = function(the_date, format) {
   			
-  	  if (typeof format == 'undefined') {
-  	    format = 'dd.MM.yyyy HH:mm';	
-  	  }	
-  		
-      if (the_date instanceof Date) {
-        return the_date.toString(format);	
-      }
-  	  else	
-        if (!isNaN(new Date(the_date))) { 
-          return new Date(the_date).toString(format);
-        }
-        else 
-        {
-          return '';	
-        } 	
+      return ysdFormatter.formatDate(the_date, format);
   		
   	}
   
     this.formatCurrency = function(the_currency, format) {
     	
-    	
+    	return ysdFormatter.formatCurrency(the_currency, format);
+
     }
 
     this.formatPadNumber = function(num, length) {
-      var r = "" + num;
-      while (r.length < length) {
-        r = "0" + r;
-      }
-      return r;
+
+      return ysdFormatter.formatPadNumber(num, lenght);
+
     }
   
   };
