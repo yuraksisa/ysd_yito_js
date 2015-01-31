@@ -24,7 +24,7 @@ define(function() {
     	
         this.listeners[type].slice(this.listeners[type].indexOf(listener),1);
     	
-        if (this.listeners[type].lenght == 0) {
+        if (this.listeners[type].length == 0) {
           delete this.listeners[type];	
         }	
     	

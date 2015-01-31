@@ -3,7 +3,7 @@
 */
 
 define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmleditor', 'YSDFormatter',
-        'jquery.ui', 'datejs', 'bootstrap', 'jquery.bsAlerts'], function(tmpl, YSDStyles, YSDGui, YsdForms, $, 
+        'jquery.ui', 'datejs', 'bootstrap', 'jquery.bsAlerts', 'autonumeric', 'jquery.timeentry'], function(tmpl, YSDStyles, YSDGui, YsdForms, $, 
         htmlEditor, ysdFormatter){
 	
   /* ------------------------------------------------------------------
@@ -429,7 +429,7 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
 
        if (inline) {
          YSDGui.hideElement($('.element-form-container')[0]);
-         $('.element-form-container .top-navigation-bar').show();
+         //$('.element-form-container .top-navigation-bar').show();
        }
        
     };
@@ -504,7 +504,6 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
     };
   
     this.cancelEntity = function() { /* Cancels the entity edition */
-    
       if (this.model.configuration.action == 'new' || this.model.configuration.action == 'edit') {
 
         if (destination = this.model.configuration.search_params['destination']) {
@@ -513,13 +512,12 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
       
       }
       else
-        if (this.model.configuration.action == 'list') {    
-        	
-           if (this.model.navigationMode == 'page') {
+        if (this.model.configuration.action == 'list') {  
+           if (this.model.navigationMode == 'page' || this.model.configuration.editInline) {
              this.pageMode();	
            }
            else {
-             this.elementMode();
+             this.formElementMode('edit');
            }         
 
            // Process the Hooks
@@ -694,29 +692,15 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
        
        $('.element_actions').hide();
        $('.elements_actions').show();
-     
+       
        $('.elements-list').show();    
-       $('.top-navigation-bar').show();
-       $('.bottom-navigation-bar').show();     
+       $('.elements-container .top-navigation-bar').show();
+       $('.elements-container .bottom-navigation-bar').show();     
 
        this.navigationBar('.elements-container');
     	
     };
         
-    this.elementMode = function() { /* Element Mode (show the element) */
-       
-       $('.element-form-container').hide();	
-       $('.elements-container').hide();
-       $('.element-container').show();
-
-       $('.element_actions').hide();
-       $('.elements_actions').hide();
-       
-       this.configureElementEvents();
-       this.navigationBar('.element-container');    	
-    	
-    };
-
     this.formElementMode = function(action) { /* Form Element Mode (edit/create new entity) */	
        
        var inline = (action == 'new' && this.model.configuration.newInline) ||
@@ -753,6 +737,8 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
        this.configureTabs();      // Tabs
        htmlEditor('.texteditor'); // HTML editor
        $('.alert-box').bsAlerts();
+       //$('.price').autoNumeric('init',{aSep:''});
+       //$('.time').timeEntry({show24Hours: true});
     };
 
     this.isPageMode = function() {
@@ -876,7 +862,7 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
 
     this.formatPadNumber = function(num, length) {
 
-      return ysdFormatter.formatPadNumber(num, lenght);
+      return ysdFormatter.formatPadNumber(num, length);
 
     }
   
