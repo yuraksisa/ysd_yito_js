@@ -703,6 +703,17 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
         
     this.formElementMode = function(action) { /* Form Element Mode (edit/create new entity) */	
        
+       if (action == 'new') {
+         $('.delete-entity-button').hide();
+       }
+       else {
+         $('.delete-entity-button').show();
+       }
+
+       if (this.model.configuration.action != 'list') {
+         $('.page-navigation').hide();
+       }
+
        var inline = (action == 'new' && this.model.configuration.newInline) ||
                     (action == 'edit' && this.model.configuration.editInline);
 
@@ -752,14 +763,15 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
     /* ------------------------------------------------ */
     
     this.navigationBar = function(container) { /* Configure the navigation bar */
-
-       if (this.model.entitiesCount() > 0) {
+       
+      if ((this.isFormElementMode() && this.model.configuration.action == 'list') ||
+           (this.model.summary && this.model.summary.total > this.model.pageSize)) {
          $('.elements-summary').html(this.model.summaryMessage());
          $('.navigation-bar-nav-buttons').show();
-       }
-       else {
+      }
+      else {
          $('.navigation-bar-nav-buttons').hide();
-       }
+      }
   	  
       var barSelector = container + ' .top-navigation-bar';
       var topPosition = $(barSelector).offset().top;
