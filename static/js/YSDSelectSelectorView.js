@@ -74,7 +74,7 @@ define(function() {
   
       var the_value = this.model.value;
       var selectControl = document.getElementById(selectControlId);
-      var option = selectControl.firstChild;    
+      var option = selectControl.firstElementChild;    
     
       while (option) {
       
@@ -100,7 +100,7 @@ define(function() {
           }
         }
       
-        option = option.nextSibling;  
+        option = option.nextElementSibling;  
       }
     
     }

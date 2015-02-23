@@ -689,6 +689,11 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	            data_type : 'json',
   	            content_type : 'json',
   	            success : function(data, textStatus, jqXHR) {
+                  for (var idx=0; idx < the_model.entityHooks.length; idx++) { // Notify the hooks that the element has been deleted         
+                    if (the_model.entityHooks[idx].onDelete) {
+                      the_model.entityHooks[idx].onDelete(data); 
+                    }           
+                  }                  
   	              the_model.change_state('entity_deleted_successfully');
                   if (callback) {
                     callback();
