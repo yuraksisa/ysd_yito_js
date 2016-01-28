@@ -15,7 +15,7 @@ define(['YSDStyles', 'YSDEvents', 'jquery'], function(YSDStyles, YSDEvents, $){
     backgroundDiv.style.position = 'absolute';
     backgroundDiv.style.top  = 0;
     backgroundDiv.style.left = 0;
-  
+
     var imgLoading = document.createElement('img');
     imgLoading.id = 'background_loading';
     imgLoading.src = '/img/loadinfo_net.gif';
@@ -29,6 +29,14 @@ define(['YSDStyles', 'YSDEvents', 'jquery'], function(YSDStyles, YSDEvents, $){
     });
   
     document.body.appendChild(backgroundDiv);
+
+    var docHeight = $(document).height();
+    var docWidth = $(document).width();
+    $('#background').css({
+      "height":docHeight,
+      "width":docWidth
+    });
+
     YSDStyles.center(imgLoading);
 
     return backgroundDiv;

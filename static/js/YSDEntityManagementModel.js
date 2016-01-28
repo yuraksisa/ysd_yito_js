@@ -175,7 +175,7 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
       var parts = the_url.split('/');
 
       // Removes the language from the parts before processing them
-      if (['en','es','ca'].indexOf(parts[parts.length-1]) >= 0) {
+      if (['en','es','ca','fr'].indexOf(parts[parts.length-1]) >= 0) {
         parts.splice(parts.length-1,1);	
       }
 
