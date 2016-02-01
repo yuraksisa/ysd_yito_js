@@ -613,8 +613,7 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
          searchContainer.show();             
 
       }
-
-      if (document.getElementById('advanced_search')) {
+      else if (document.getElementById('advanced_search')) {
 
          var advancedSearchContainer = $('.advanced-search-container');
          var advancedSearch = $('.advanced-search');
@@ -630,6 +629,14 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
 
          advancedSearchContainer.show();        
 
+      }
+      else if ($('.elements-search')) {
+         // Process the Hooks
+         for (var idx=0; idx < this.model.entityHooks.length; idx++) {          
+           if (this.model.entityHooks[idx].onProcessSearch) {
+             this.model.entityHooks[idx].onProcessSearch();  
+           }            
+         }
       }
 
 
