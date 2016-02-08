@@ -45,29 +45,30 @@ define(function() {
       var option = null;
       var selectControl = document.getElementById(selectControlId);
     
-      // Remove the options
-      if (selectControl.options.length > 0)
-      {
-         while (selectControl.hasChildNodes())
-         {
-           selectControl.removeChild(selectControl.firstChild); 
-         }
-      }
+      if (selectControl != null) {
+        // Remove the options
+        if (selectControl.options.length > 0)
+        {
+           while (selectControl.hasChildNodes())
+           {
+             selectControl.removeChild(selectControl.firstChild); 
+           }
+        }
 
-      if (nullOption) {
-        this.createNullOption();
-      }
+        if (nullOption) {
+          this.createNullOption();
+        }
 
-      for (idx in data_options) {
+        for (idx in data_options) {
       
-        option = document.createElement('option');
-        option.setAttribute('value', data_options[idx].id);
-        option.text = option.innerText = data_options[idx].description;
+          option = document.createElement('option');
+          option.setAttribute('value', data_options[idx].id);
+          option.text = option.innerText = data_options[idx].description;
       
-        selectControl.appendChild(option);
+          selectControl.appendChild(option);
       
+        }
       }
-    
     }
   
     this.selectValues = function() { /* Select the values */

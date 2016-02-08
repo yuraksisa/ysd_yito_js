@@ -14,7 +14,7 @@ define(['jquery','jquery.wysiwyg'], function($) {
          html: {visible: true}  // Show a control to 
        }
     });
-	
+  
   }
   
   return htmlEditor;
