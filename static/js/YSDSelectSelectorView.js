@@ -75,35 +75,34 @@ define(function() {
   
       var the_value = this.model.value;
       var selectControl = document.getElementById(selectControlId);
-      var option = selectControl.firstElementChild;    
-    
-      while (option) {
+
+      if (selectControl != null) {
+        var option = selectControl.firstElementChild;    
+        while (option) {
       
-        if (the_value instanceof Array) {
-          for (idx in the_value) {
-            if (the_value[idx] instanceof Object && option.getAttribute('value') == the_value[idx].id) {
-              option.selected = true; 
-            }
-            else 
-              if (option.getAttribute('value') == the_value[idx])
-              {
+          if (the_value instanceof Array) {
+            for (idx in the_value) {
+              if (the_value[idx] instanceof Object && option.getAttribute('value') == the_value[idx].id) {
+                option.selected = true; 
+              }
+              else if (option.getAttribute('value') == the_value[idx]) {
                 option.selected = true;
               }
+            }
           }
-        }
-        else
-        {
-          if (the_value instanceof Object && option.getAttribute('value') == the_value.id) {
-            option.selected = true; 
+          else
+          {
+            if (the_value instanceof Object && option.getAttribute('value') == the_value.id) {
+              option.selected = true; 
+            }
+            else if (option.getAttribute('value') == the_value) {
+              option.selected = true;
+            }
           }
-          else if (option.getAttribute('value') == the_value) {
-            option.selected = true;
-          }
-        }
       
-        option = option.nextElementSibling;  
+          option = option.nextElementSibling;  
+        }
       }
-    
     }
   
   
