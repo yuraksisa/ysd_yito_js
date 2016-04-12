@@ -59,9 +59,9 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	this.lastError = null;        /* It represents the last error in Ajax request */
   	
   	this.events = new YSDEventTarget(); /* Manages the model events */
-  	
-  	this.forceReload = false; /* In a massive data entry, forces reload elements when the user cancels insert after creating some elements */
-  	  	
+  	this.forceReload = false; /* In a massive data entry, forces reload elements when the user cancels insert after creating some elements */  	
+    this.searchData = {};
+
   	/* ------- Event listeners ---------- */
   	
   	this.addListener = function(type, listener) { /* addListener */
@@ -279,8 +279,17 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	
   	this.setPage = function(newPage) {         /* Changes the current page */
   	  this.page = newPage;
-  	  this.query(); // Retrieve more data
-  	};
+      var count=0;
+      for (var idx in this.searchData) {
+        count++;
+      }
+      if (count == 0) {
+        this.query();
+      }
+      else {
+  	    this.query(this.searchData); // Retrieve more data
+  	  }
+    };
   	  	
   	this.setEntityIndex = function(newIndex) { /* Changes the current entity element */
 
@@ -395,6 +404,18 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	 
   	}
   	
+    this.reload = function() {
+      var count=0;
+      for (var idx in this.searchData) {
+        count++;
+      }
+      if (count == 0) {
+        this.query();
+      }
+      else {
+        this.query(this.searchData); // Retrieve more data
+      }     
+    }
   	
   	/* -------- Query ------------ */
   	
@@ -749,11 +770,11 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
     this.query = function(queryObject, callback) { /* Queries for data */
   	 	  	 	
   	  this.change_state('query_execution');	
-  	  
+        	  
   	  if (typeof queryObject != 'undefined') {
    	    queryObject = encodeURIComponent(JSON.stringify(queryObject));
   	  }
-  	  
+
   	  var queryString = $('.search-entity-input').val();
   	  
   	  var the_url = this.urls.query_url + this.queryParams(); 	  	  

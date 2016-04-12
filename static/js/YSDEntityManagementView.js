@@ -159,7 +159,25 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
            break;
            
         case 'list':
-           this.model.query();
+
+           var filters = {};
+           for (var idx=0; idx < this.model.entityHooks.length; idx++) {         
+             if (this.model.entityHooks[idx].setFilters) {
+               this.model.entityHooks[idx].setFilters(filters);
+             }           
+           }
+           var filtersCount = 0;
+           for (var field in filters) {
+             filtersCount++;
+           }
+           if (filtersCount == 0) {
+             this.model.query();
+           }
+           else {
+             this.model.searchData = filters;
+             this.model.query(filters);
+           }
+
            break;	
       	
       }
@@ -168,6 +186,7 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
 
     this.configureBackLink = function() { /* Configure the back button */
 
+      
       if (this.model.configuration.search_params['destination']) {
         $('#back').attr('href', this.model.configuration.search_params['destination']);
         $('.back-bar').show();
@@ -175,6 +194,7 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
       else {
         $('.back-bar').hide();
       }
+      
 
     }
 

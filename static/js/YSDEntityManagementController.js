@@ -94,7 +94,8 @@ define(function(){
           search_data = this.model.entityHooks[idx].adaptSearchFormData(search_data); 
         }           
       }
-
+      this.model.page = 1; // Reset the page
+      this.model.searchData = search_data; // Holds the search conditions
       this.model.query(search_data);  	
 
     }

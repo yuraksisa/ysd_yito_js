@@ -95,6 +95,7 @@ define(['YSDStyles', 'YSDEvents', 'jquery'], function(YSDStyles, YSDEvents, $){
 
     // Lock the background
     var backDiv = YSDGui.lockBackground( '#000000', unlockOnClick );
+    backDiv.style.zIndex = 1000;
   
     YSDEvents.removeEvent(backDiv, 'click', YSDGui.unLockBackground);
  
@@ -119,6 +120,26 @@ define(['YSDStyles', 'YSDEvents', 'jquery'], function(YSDStyles, YSDEvents, $){
  
   }
 	
+  YSDGui.tabs = function(contentSelector, contentTabsSelector) {
+
+      $(contentSelector + " > div").hide(); // Initially hide all content
+      $(contentTabsSelector + " li:first").attr("id","current"); // Activate first tab
+      $(contentSelector + " > div:first").fadeIn(); // Show first tab content
+      $(contentTabsSelector + ' a').click(function(e) {
+        e.preventDefault();
+        if ($(this).closest("li").attr("id") == "current"){ //detection for current tab
+         return;       
+        }
+        else{             
+          $(contentSelector + " > div").hide(); //Hide all content
+          $(contentTabsSelector + " li").attr("id",""); //Reset id's
+          $(this).parent().attr("id","current"); // Activate this
+          $('#' + $(this).attr('name')).fadeIn(); // Show content for current tab
+        }
+      });
+
+  }
+
   return YSDGui;	
 	
 });
