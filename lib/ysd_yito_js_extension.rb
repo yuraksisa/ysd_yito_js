@@ -52,13 +52,13 @@ module Huasi
 
        if SystemConfiguration::Variable.get_value('site.js_lib', 'full_library') == 'full_library'
 
-         ['/assets/js/require.js',
+         ['/assets/js/require.min.js',
           '/assets/js/built.js']
 
        else
 
          ['/assets/js/require_config.js',
-          '/assets/js/require.js']
+          '/assets/js/require.min.js']
 
        end
     end    

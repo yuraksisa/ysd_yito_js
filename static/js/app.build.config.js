@@ -22,6 +22,9 @@ requirejs.config({
         "jquery.calendar"         : "jquery.calendar",
 		"bootstrap"               : "bootstrap",
 		"jquery.bsAlerts"         : "jquery.bsAlerts",
+        "jquery.combo.select"     : "jquery.combo.select",
+        "jquery.dropdown"         : "jquery.dropdown",
+        "jquery.fixedtable"       : "jquery.fixedtable",
 		"json2"                   : "json2",
 		"datejs"                  : "date-es-ES"
 	},
@@ -53,10 +56,16 @@ requirejs.config({
         "jquery.timeentry":['jquery','jquery.plugin'],        
         "bootstrap" : {},
         "jquery.bsAlerts": ['jquery','bootstrap'],
+        "jquery.combo.select": ['jquery'],
+        "jquery.dropdown": ['jquery'],
+        "jquery.fixedtable": ['jquery'],
         "json2" : { 
           "exports": 'JSON'
         },
         "datejs" : {},
+        "modernizr" : {
+          "exports": 'Modernizr'
+        },
         "underscore" : {
             exports: '_'
         },     // Underscore.js library (functions for old browsers)
