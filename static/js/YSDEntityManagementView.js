@@ -779,7 +779,7 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
        //$('.time').timeEntry({show24Hours: true});
 
       $.validator.addMethod("time24", function(value, element) {
-        if (!/^\d{2}:\d{2}$/.test(value)) {
+        if (value!='' && value != null && !/^\d{2}:\d{2}$/.test(value)) {
           return false;
         } 
         var parts = value.split(':');
