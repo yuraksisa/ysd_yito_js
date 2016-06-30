@@ -1,5 +1,5 @@
 define(['jquery','ysdhtmleditor', 'jquery.placeholder', 'jquery.formparams', 
-        'jquery.ui', 'bootstrap', 'jquery.bsAlerts'], function($, htmlEditor){
+        'jquery.ui', 'bootstrap', 'jquery.bsAlerts', 'jquery.validate'], function($, htmlEditor){
 
   var YsdForms = {};
 
@@ -30,6 +30,25 @@ define(['jquery','ysdhtmleditor', 'jquery.placeholder', 'jquery.formparams',
         $('.edit[rel="'+rel+'"]').show();
         $('.render[rel="'+rel+'"]').hide();
     });
+
+    // Validations
+
+    $.validator.addMethod("time24", function(value, element) {
+        if (!/^\d{2}:\d{2}$/.test(value)) {
+          return false;
+        } 
+        var parts = value.split(':');
+        if (parseInt(parts[0]) > 23 || parseInt(parts[1]) > 59) {
+          return false;
+        } 
+        return true;
+      }, "Invalid time format. The format is hh:mm");    
+
+    $.validator.addMethod("regexp",
+        function(value, element, regexp) {
+           var re = new RegExp(regexp);
+           return this.optional(element) || re.test(value);  
+        }, "Value does not match");
 
   };
 

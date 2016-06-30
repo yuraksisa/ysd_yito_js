@@ -3,7 +3,7 @@
 */
 
 define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmleditor', 'YSDFormatter',
-        'jquery.ui', 'datejs', 'bootstrap', 'jquery.bsAlerts', 'autonumeric', 'jquery.timeentry'], function(tmpl, YSDStyles, YSDGui, YsdForms, $, 
+        'jquery.ui', 'datejs', 'bootstrap', 'jquery.bsAlerts', 'autonumeric', 'jquery.timeentry', 'jquery.validate'], function(tmpl, YSDStyles, YSDGui, YsdForms, $, 
         htmlEditor, ysdFormatter){
 	
   /* ------------------------------------------------------------------
@@ -777,6 +777,24 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
        $('.alert-box').bsAlerts();
        //$('.price').autoNumeric('init',{aSep:''});
        //$('.time').timeEntry({show24Hours: true});
+
+      $.validator.addMethod("time24", function(value, element) {
+        if (!/^\d{2}:\d{2}$/.test(value)) {
+          return false;
+        } 
+        var parts = value.split(':');
+        if (parseInt(parts[0]) > 23 || parseInt(parts[1]) > 59) {
+          return false;
+        } 
+        return true;
+      }, "Invalid time format. The format is hh:mm");    
+
+      $.validator.addMethod("regexp",
+        function(value, element, regexp) {
+           var re = new RegExp(regexp);
+           return this.optional(element) || re.test(value);  
+        }, "Value does not match");
+
     };
 
     this.isPageMode = function() {
