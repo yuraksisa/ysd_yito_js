@@ -722,7 +722,9 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
        
        $('.elements-list').show();    
        $('.elements-container .top-navigation-bar').show();
-       $('.elements-container .bottom-navigation-bar').show();     
+       $('.elements-container .bottom-navigation-bar').show(); 
+
+       $('.new-entity-button').show();    
 
        this.navigationBar('.elements-container');
     	
