@@ -5,12 +5,21 @@ define(function() {
 
   var cache = {};
   
-  var template = function tmpl(str, data){
+  var template = function tmpl(str, data, useCache){
+
+    useCache = useCache || true;    
+
     // Figure out if we're getting a template, or if we need to
     // load the template - and be sure to cache the result.
     var fn = !/\W/.test(str) ?
-      cache[str] = cache[str] ||
-        tmpl(document.getElementById(str).innerHTML) :
+      
+      ( useCache ?
+        (cache[str] = cache[str] || tmpl(document.getElementById(str).innerHTML))
+        :
+        tmpl(document.getElementById(str).innerHTML)
+      )
+
+      :
       
       // Generate a reusable function that will serve as a template
       // generator (and which will be cached).

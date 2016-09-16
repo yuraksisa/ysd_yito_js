@@ -31,9 +31,11 @@ define(['jquery', 'ysdtemplate'], function($, tmpl){
       this.actions.appendChild(this.appendAction);
        	
  	    var holder = document.getElementById(placementId);
- 	    holder.appendChild(this.container);
- 	    holder.appendChild(this.actions);
- 	  
+      if (holder != null) {
+ 	      holder.appendChild(this.container);
+ 	      holder.appendChild(this.actions);
+ 	    }
+
  	    var controller = this.controller;
  	  
  	    $('#'+controlName+'Actions .list-management-add-action').bind('click',

@@ -310,6 +310,10 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	
   	this.currentEntity = function() {          /* Retrieves the current entity */
  	  
+      if (this.state == 'creating_entity') {
+        return null;
+      }
+
       return this.dataModel.current();
   	  	
   	};
