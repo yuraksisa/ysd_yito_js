@@ -61,8 +61,8 @@ define(['jquery','ysdhtmleditor', 'jquery.placeholder', 'jquery.formparams',
             url  : form.action,
             data : data,    
             type : method,
-            data_type : 'json',
-            content_type : 'json',
+            dataType : 'json',
+            contentType : 'application/json; charset=utf-8',
             success : function(data, textStatus, jqXHR) {
               YsdForms.showAlert('done', 'success');
             },

@@ -607,8 +607,8 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	  	        data : the_data,    
   	            type : 'POST',
   	            /*crossDomain : true,*/
-  	            data_type : 'json',
-  	            content_type : 'json',
+                dataType : 'json',
+                contentType : 'application/json; charset=utf-8',
   	            success : function(data, textStatus, jqXHR) {
                   the_model.appendEntity(data);                      
                   for (var idx=0; idx < the_model.entityHooks.length; idx++) { // Notify the hooks that the element has been created         
@@ -671,8 +671,8 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	  	        data : the_data,    
   	            type : 'PUT',
   	            /*crossDomain : true,*/
-  	            data_type : 'json',
-  	            content_type : 'json',
+  	            dataType : 'json',
+  	            contentType : 'application/json; charset=utf-8',
   	            success : function(data, textStatus, jqXHR) {
   	              the_model.synchronizeCurrentEntity(data);
   	              the_model.change_state('entity_updated_successfully');
@@ -711,8 +711,8 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	  	        data : the_data,    
   	            type : 'DELETE',
   	            /*crossDomain : true,*/
-  	            data_type : 'json',
-  	            content_type : 'json',
+                dataType : 'json',
+                contentType : 'application/json; charset=utf-8',
   	            success : function(data, textStatus, jqXHR) {
                   for (var idx=0; idx < the_model.entityHooks.length; idx++) { // Notify the hooks that the element has been deleted         
                     if (the_model.entityHooks[idx].onDelete) {
@@ -750,8 +750,8 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	          data : null,
   	          type : 'DELETE' ,
   	          /*crossDomain: true,*/
-  		      data_type : 'json',
-  		      content_type : 'json',
+                dataType : 'json',
+                contentType : 'application/json; charset=utf-8',
   		      success : function(data, textStatus, jqXHR) {
   		      	the_model.change_state('all_entities_deleted_successfully');
               if (callback) {
@@ -794,8 +794,8 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	          data : queryObject || queryString,
   	          type : 'POST' ,
   	          /*crossDomain: true,*/
-  		      data_type : 'json',
-  		      content_type : 'json',
+                dataType : 'json',
+                contentType : 'application/json; charset=utf-8',
   		      success : function(data, textStatus, jqXHR) {
   		      	the_model.dataModel.setData(data.data);
   		      	the_model.summary = data.summary;
@@ -836,8 +836,8 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
      $.ajax( {url: url,
               data: the_data,
               type: method,
-              data_type: 'json',
-              content_type: 'json',
+                dataType : 'json',
+                contentType : 'application/json; charset=utf-8',
               success: function(data, textStatus, jqXHR) {
                 the_model.synchronizeCurrentEntity(data);
                   for (var idx=0; idx < the_model.entityHooks.length; idx++) { // Notify the hooks that the element has been created         
@@ -874,8 +874,8 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
       $.ajax( { url: url,
               data: the_form_data,
               type: method,
-              data_type: 'json',
-              content_type: 'json',
+                dataType : 'json',
+                contentType : 'application/json; charset=utf-8',
               success: function(data, textStatus, jqXHR) {
                 the_model.synchronizeEntities(data);
                 the_model.change_state('bulk_action_executed_successfully');
