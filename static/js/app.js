@@ -3,6 +3,7 @@
 // node ../../build_js/r.js -o mainConfigFile=app.build.config.js name=app.js out=built.js baseUrl=.
 //
 requirejs(['jquery',
+           'jquery.migrate',
            'jquery.ui',
            'jquery.ui.datepicker-es',
            'jquery.ui.datepicker-ca',           
@@ -36,6 +37,16 @@ requirejs(['jquery',
            'jquery.fixedtable',
            'bootstrap',
            'jquery.sidr',           
+           // rentit theme
+           'superfish',
+           'jquery.prettyPhoto',
+           'owl.carousel',
+           'jquery.sticky',
+           'jquery.easing',
+           'jquery.smoothscroll',
+           'swiper.jquery',     
+           'bootstrap.select', 
+           // rentit theme end
            'json2', 
            'datejs',
            'time',

@@ -22,7 +22,7 @@ define(function(){
         }
     });	
 	
-	this.retrieveData = function() {	  	
+	this.retrieveData = function() { 	
 	  this.dataSource.retrieveData();	
 	}
 	

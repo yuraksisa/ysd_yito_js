@@ -2,7 +2,7 @@ define(function() {
   
   /* ------------- The view -------------------- */
 
-  YSDSelectSelectorView = function(model, controller, selectControlId, nullOption, nullOptionText) {
+  YSDSelectSelectorView = function(model, controller, selectControlId, nullOption, nullOptionText, callback) {
 
     this.model = model;
     this.controller = controller;
@@ -14,6 +14,7 @@ define(function() {
     else {
       this.nullOptionText = '- No selection -';
     }
+    this.callback = callback;
 
     this.notify = function(status) {
     
@@ -40,7 +41,7 @@ define(function() {
     }
   
     this.createOptions = function() { /* Create the options */
-    
+
       var data_options = this.model.data;
       var option = null;
       var selectControl = document.getElementById(selectControlId);
@@ -60,7 +61,6 @@ define(function() {
         }
 
         for (idx in data_options) {
-      
           option = document.createElement('option');
           option.setAttribute('value', data_options[idx].id);
           option.text = option.innerText = data_options[idx].description;
@@ -69,6 +69,11 @@ define(function() {
       
         }
       }
+
+      if (this.callback) {
+        this.callback();
+      }
+
     }
   
     this.selectValues = function() { /* Select the values */
@@ -94,9 +99,11 @@ define(function() {
           {
             if (the_value instanceof Object && option.getAttribute('value') == the_value.id) {
               option.selected = true; 
+              break;
             }
             else if (option.getAttribute('value') == the_value) {
               option.selected = true;
+              break;
             }
           }
       

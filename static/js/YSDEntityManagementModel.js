@@ -779,7 +779,8 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
    	    queryObject = encodeURIComponent(JSON.stringify(queryObject));
   	  }
 
-  	  var queryString = $('.search-entity-input').val();
+      var querySearchObject = encodeURIComponent(JSON.stringify($($('.search-entity-input')[0].form).formParams(false)));
+  	  //var queryString = $('.search-entity-input').val();
   	  
   	  var the_url = this.urls.query_url + this.queryParams(); 	  	  
   	  var the_model = this;
@@ -791,7 +792,7 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	  }
   	  	
   	  $.ajax( {url : the_url ,
-  	          data : queryObject || queryString,
+  	          data : queryObject || querySearchObject , //queryString,
   	          type : 'POST' ,
   	          /*crossDomain: true,*/
                 dataType : 'json',

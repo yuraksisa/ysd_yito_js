@@ -8,11 +8,11 @@ define(['YSDListSelectorModel','YSDSelectSelectorController', 'YSDSelectSelector
      It uses the ListSelectorModel as a model
    */ 
 
-  YSDSelectSelector = function(selectControlId, dataSource, value, nullOption, nullOptionText) {
+  YSDSelectSelector = function(selectControlId, dataSource, value, nullOption, nullOptionText, callback) {
 	
     this.model = new ListSelectorModel(dataSource, value);
     this.controller = new SelectSelectorController();
-    this.view = new SelectSelectorView(this.model, this.controller, selectControlId, nullOption, nullOptionText);	
+    this.view = new SelectSelectorView(this.model, this.controller, selectControlId, nullOption, nullOptionText, callback);	
   
     this.setValue = function(newValue) {
       this.model.setValue(newValue);	

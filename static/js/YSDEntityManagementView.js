@@ -139,6 +139,11 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
         function(event) {
            controller.searchInputChange();
         });
+
+      $('.search-entity-control').bind('change',
+        function(event) {
+           controller.searchInputChange();
+        })
       
     };
     

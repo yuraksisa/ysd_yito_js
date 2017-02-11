@@ -1,7 +1,8 @@
 requirejs.config({
 		
 	paths: {
-		"jquery"                  : "jquery-1.8.2", 
+		"jquery"                  : "jquery-1.9.1", 
+        "jquery.migrate"          : "jquery-migrate-1.3.0",
 		"jquery.ui"               : "jquery-ui-1.9.0", 
 		"jquery.ui.datepicker-es" : "jquery.ui.datepicker-es",
         "jquery.ui.datepicker-ca" : "jquery.ui.datepicker-ca",        
@@ -20,16 +21,21 @@ requirejs.config({
 		"jquery.lettering"        : "jquery.lettering",
         "jquery.sidr"             : "jquery.sidr.min",
         "jquery.calendar"         : "jquery.calendar",
-		"bootstrap"               : "bootstrap",
+		"bootstrap"               : "bootstrap-3.3.4",
 		"jquery.bsAlerts"         : "jquery.bsAlerts",
         "jquery.combo.select"     : "jquery.combo.select",
         "jquery.dropdown"         : "jquery.dropdown",
         "jquery.fixedtable"       : "jquery.fixedtable",
+        // rentit theme
+        "jquery.easing"           : "jquery.easing.min",
+        "jquery.smoothscroll"     : "jquery.smoothscroll.min",
+        // rentit theme ends
 		"json2"                   : "json2",
 		"datejs"                  : "date-es-ES"
 	},
 
 	shim: {
+        "jquery.migrate": ['jquery'],
         "jquery.tools" : ['jquery'],
         "jquery.ui"    : ['jquery'],
         "jquery.ui.datepicker-es" : ['jquery', 'jquery.ui'],
@@ -59,6 +65,16 @@ requirejs.config({
         "jquery.combo.select": ['jquery'],
         "jquery.dropdown": ['jquery'],
         "jquery.fixedtable": ['jquery'],
+        // rentit theme
+        "superfish": ['jquery'],
+        "jquery.prettyPhoto": ['jquery'],
+        "owl.carousel": ['jquery'],
+        "jquery.sticky": ['jquery'],
+        "jquery.easing": ['jquery'],
+        "jquery.smoothscroll" : ['jquery'],
+        "swiper.jquery": ['jquery'],
+        "bootstrap.select": ['bootstrap'],
+        // rentit theme end
         "json2" : { 
           "exports": 'JSON'
         },
