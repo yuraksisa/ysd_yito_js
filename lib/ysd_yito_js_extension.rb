@@ -34,7 +34,7 @@ module Huasi
     # @return [Array]
     #   An array which contains the css resources used by the module
     #
-    #def page_style(context={})
+    #def page_style(context={},page)
     #  [
     #    '/assets/css/style.css'         
     #  ]       
@@ -48,7 +48,7 @@ module Huasi
     # @return [Array]
     #   An array which contains the css resources used by the module
     #
-    def page_script(context={})
+    def page_script(context={}, page)
 
        if SystemConfiguration::Variable.get_value('site.js_lib', 'full_library') == 'full_library'
 
