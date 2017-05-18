@@ -1,5 +1,5 @@
 define(['jquery','ysdhtmleditor', 'jquery.placeholder', 'jquery.formparams', 
-        'jquery.ui', 'bootstrap', 'jquery.bsAlerts', 'jquery.validate'], function($, htmlEditor){
+        'jquery.ui', 'bootstrap', 'jquery.bsAlerts', 'jquery.validate','datejs'], function($, htmlEditor){
 
   var YsdForms = {};
 
@@ -31,8 +31,14 @@ define(['jquery','ysdhtmleditor', 'jquery.placeholder', 'jquery.formparams',
         $('.render[rel="'+rel+'"]').hide();
     });
 
-    // Validations
+    YsdForms.appendValidators();
+   
+  };
 
+  YsdForms.appendValidators = function() {
+
+
+    // time24
     $.validator.addMethod("time24", function(value, element) {
         if (!/^\d{2}:\d{2}$/.test(value)) {
           return false;
@@ -42,13 +48,42 @@ define(['jquery','ysdhtmleditor', 'jquery.placeholder', 'jquery.formparams',
           return false;
         } 
         return true;
-      }, "Invalid time format. The format is hh:mm");    
+      });    
 
+    // Regular expression
     $.validator.addMethod("regexp",
         function(value, element, regexp) {
            var re = new RegExp(regexp);
            return this.optional(element) || re.test(value);  
-        }, "Value does not match");
+        });
+
+    // Max date
+
+    $.validator.addMethod("validDate",
+        function(value, element) {
+              if (value != '' && Date.parseExact(value,'d/M/yyyy')== null) {
+                  return false;
+              }
+              return true;
+        });    
+    
+    $.validator.addMethod("maxDate",
+        function(value, element, maxDate) {
+              var date = Date.parseExact(value,'d/M/yyyy');
+              if (date != null && date > maxDate) {
+                  return false;
+              }
+              return true;
+        });
+
+    $.validator.addMethod("minDate",
+        function(value, element, minDate) {
+              var date = Date.parseExact(value,'d/M/yyyy');
+              if (date!= null && date < minDate) {
+                  return false;
+              }
+              return true;
+        });
 
   };
 

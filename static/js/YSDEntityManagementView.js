@@ -1,5 +1,6 @@
 /* JQuery plugins used: 
      - jqueryui  (dialog)
+     - 2017.05.18
 */
 
 define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmleditor', 'YSDFormatter',
@@ -785,6 +786,9 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
        //$('.price').autoNumeric('init',{aSep:''});
        //$('.time').timeEntry({show24Hours: true});
 
+       YsdForms.appendValidators();
+
+      /*
       $.validator.addMethod("time24", function(value, element) {
         if (value!='' && value != null && !/^\d{2}:\d{2}$/.test(value)) {
           return false;
@@ -801,8 +805,10 @@ define(['ysdtemplate', 'YSDStyles', 'YSDGui', 'YSDForms', 'jquery', 'ysdhtmledit
            var re = new RegExp(regexp);
            return this.optional(element) || re.test(value);  
         }, "Value does not match");
+      */
 
     };
+      
 
     this.isPageMode = function() {
        return $('.elements-container').is(':visible');
