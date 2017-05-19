@@ -40,6 +40,9 @@ define(['jquery','ysdhtmleditor', 'jquery.placeholder', 'jquery.formparams',
 
     // time24
     $.validator.addMethod("time24", function(value, element) {
+        if (''===value) {
+          return true;
+        }
         if (!/^\d{2}:\d{2}$/.test(value)) {
           return false;
         } 
