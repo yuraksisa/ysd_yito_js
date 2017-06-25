@@ -93,6 +93,15 @@ define(['YSDStyles', 'YSDEvents', 'jquery'], function(YSDStyles, YSDEvents, $){
    */
   YSDGui.showElement = function(element, unlockOnClick, callback) {
 
+    YSDGui.showElementInMode(element, unlockOnClick, callback, 'fixed', 0, 0);
+ 
+  }
+
+  /**
+   * Show the element in front of all the other elements
+   */
+  YSDGui.showElementInMode = function(element, unlockOnClick, callback, mode, topAdjust, leftAdjust) {
+
     // Lock the background
     var backDiv = YSDGui.lockBackground( '#000000', unlockOnClick );
     backDiv.style.zIndex = 1000;
@@ -116,8 +125,13 @@ define(['YSDStyles', 'YSDEvents', 'jquery'], function(YSDStyles, YSDEvents, $){
 
     // Center the element on the document
     element.style.zIndex = 1001;
-    YSDStyles.center(element);
- 
+    if (mode == 'absolute') {
+      YSDStyles.centerAbsolute(element, topAdjust, leftAdjust);
+    }
+    else {
+      YSDStyles.center(element);
+    }
+
   }
 	
   YSDGui.tabs = function(contentSelector, contentTabsSelector) {

@@ -59,6 +59,24 @@ define(function(){
   	
   }
 
+  /**
+   * Center the element in its container
+   */
+  YSDStyles.centerAbsolute = function(element, topAdjust, leftAdjust) {
+    
+    element.style.position = 'absolute';
+
+    var the_height = document.body.clientHeight; /*window.innerHeight ||  Math.min(document.body.clientHeight, window.screen.height);*/
+    var the_width = document.body.clientWidth; /*window.innerWidth || Math.min(document.body.clientWidth, window.screen.width);*/
+  
+    element.style.top  = new Number(Math.max((the_height - element.clientHeight - topAdjust*2) / 2, 20)).toFixed(0) + 'px';   
+    element.style.left = new Number(Math.max((the_width - element.clientWidth - leftAdjust*2) / 2,10)).toFixed(0)+ 'px';    
+
+  }
+
+  /**
+   * Center container
+   */ 
   YSDStyles.center_container = function(element) {
 
     element.style.marginTop  = new Number((element.parentNode.clientHeight-element.clientHeight) / 2).toFixed(0) + 'px'; 
