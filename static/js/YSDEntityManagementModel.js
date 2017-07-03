@@ -587,7 +587,7 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	    return;	
   	  }
   	  
-  	  var the_data = $($('.create-entity-button')[0].form).formParams(true);
+  	  var the_data = $($('.create-entity-button')[0].form).formParams(false);
   	  
   	  // Pre-process the data before be sent to the backend (Hooks) 	  
       for (var idx=0; idx < this.entityHooks.length; idx++) {        	
@@ -649,7 +649,7 @@ define(['jquery', 'YSDEventTarget','YSDGui', 'YSDjson2', 'jquery.formparams', 'j
   	    return;	
   	  }  	  
   	  
-  	  var the_data = $(the_button.form).formParams(true);
+  	  var the_data = $(the_button.form).formParams(false);
 
   	  // Pre-process the data before be sent to the backend (Hooks)	  
       for (var idx=0; idx < this.entityHooks.length; idx++) {        	
