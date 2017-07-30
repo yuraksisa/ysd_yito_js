@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
 
   s.name    = "ysd_yito_js"
-  s.version = "0.2.2"
+  s.version = "0.2.3"
   s.authors = ["Yurak Sisa Dream"]
   s.date    = "2012-10-15"
   s.email   = ["yurak.sisa.dream@gmail.com"]
