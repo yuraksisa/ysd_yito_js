@@ -50,7 +50,6 @@ define(function(){
 	
     element.style.position = 'fixed';
   
-    /*topOffset = window.pageYOffset || document.body.scrollTop;*/
     var the_height = window.innerHeight || Math.min(document.body.clientHeight, window.screen.height);
     var the_width = window.innerWidth || Math.min(document.body.clientWidth, window.screen.width);
   
